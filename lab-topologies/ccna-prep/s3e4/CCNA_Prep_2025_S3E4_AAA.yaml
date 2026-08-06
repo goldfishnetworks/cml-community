@@ -1,0 +1,783 @@
+annotations:
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#000000'
+    rotation: 0
+    text_bold: false
+    text_content: 'CCNA Exam Prep: Back to Networking Basics with Hank Preston and
+      Patrick Gargano'
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -600.0
+    y1: -120.0
+    z_index: 0
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      2.8 Describe network device management access (Telnet, SSH, HTTP, HTTPS, console, TACACS+/RADIUS, and cloud managed)
+      5.3 Configure and verify device access control using local passwords
+      5.8 Compare authentication, authorization, and accounting concept
+    text_font: monospace
+    text_italic: false
+    text_size: 10
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -880.0
+    y1: -40.0
+    z_index: 1
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#000000'
+    rotation: 0
+    text_bold: false
+    text_content: Managing Network Access with Authentication, Authorization, and
+      Accounting
+    text_font: monospace
+    text_italic: false
+    text_size: 10
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -600.0
+    y1: -80.0
+    z_index: 2
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#2D3BD8'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Part 1: Configure a default authentication method
+      Part 2: Configure a named authentication method
+      Part 3: Configure server-based AAA using TACACS+
+      Part 4: Configure server-based AAA using RADIUS
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -960.0
+    y1: 80.0
+    z_index: 3
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: 192.168.1.20
+    text_font: monospace
+    text_italic: false
+    text_size: 8
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: 80.0
+    y1: 40.0
+    z_index: 4
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: 10.1.1.10
+    text_font: monospace
+    text_italic: false
+    text_size: 8
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -360.0
+    y1: 120.0
+    z_index: 6
+smart_annotations:
+  - tag: servers
+    is_on: true
+    padding: 79
+    label: 192.168.1.0/24
+    tag_offset_x: 0
+    tag_offset_y: 0
+    tag_size: 14
+    group_distance: 400
+    thickness: 1
+    border_style: ''
+    fill_color: '#B7E3D980'
+    border_color: '#00000080'
+    z_index: 1
+nodes:
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: "!\n!\nhostname R1\n!\n!\n!\nno logging console\nno aaa new-model\n\
+          \n!\n!\nno ip domain lookup\nip domain name ccnaprep.internal\n!\n!\ncrypto\
+          \ pki trustpoint TP-self-signed-131184658\n enrollment selfsigned\n subject-name\
+          \ cn=IOS-Self-Signed-Certificate-131184658\n revocation-check none\n rsakeypair\
+          \ TP-self-signed-131184658\n hash sha512\n!\n!\ncrypto pki certificate chain\
+          \ TP-self-signed-131184658\n certificate self-signed 01\n  3082032E 30820216\
+          \ A0030201 02020101 300D0609 2A864886 F70D0101 0D050030\n  30312E30 2C060355\
+          \ 04030C25 494F532D 53656C66 2D536967 6E65642D 43657274\n  69666963 6174652D\
+          \ 31333131 38343635 38301E17 0D323531 31323030 33343035\n  305A170D 33353131\
+          \ 32303033 34303530 5A303031 2E302C06 03550403 0C25494F\n  532D5365 6C662D53\
+          \ 69676E65 642D4365 72746966 69636174 652D3133 31313834\n  36353830 82012230\
+          \ 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02\n  82010100 EFB828BB\
+          \ 7CBAE8E6 BDD55681 F205842B E4E289D5 7957D6F5 B9BC9B2B\n  AA3A0FEF DDB26E43\
+          \ 0E933692 1A57BDF4 4DCD5642 BC645EFA 3612AA7A 4D50C572\n  1725AE0B BDCD1897\
+          \ F5AD0DBE 1B9A953B F92836E5 AFC3E156 FF9A4669 F33BA360\n  353DC6A3 145C3D22\
+          \ B434BE00 3E8682E5 CEEA9312 E911D5E3 C7CDC704 A0337C13\n  63BC6BE6 78C08F85\
+          \ E57A7EB6 856A34ED C6007B77 DB00F61C 7E377DD8 1F823A90\n  8792EFB6 4353D6CF\
+          \ 6C9E0DB5 4DC94D82 CCC373A8 D7D0E483 2FC8BA61 75C1E004\n  2DCC88E5 58A9ABC8\
+          \ E78DC50C 7391F62B 2A0CF99B 4A751FA5 D99BC931 C61743BC\n  9BCB36BB 907D5803\
+          \ 56BE2543 6D8DFF5D 8D13E88B 420AE4F8 02EE35A5 6DA24A0E\n  AA23902D 02030100\
+          \ 01A35330 51301D06 03551D0E 04160414 3828E3FD F200FC76\n  BFD581B9 357CDFE1\
+          \ AC2C2D81 301F0603 551D2304 18301680 143828E3 FDF200FC\n  76BFD581 B9357CDF\
+          \ E1AC2C2D 81300F06 03551D13 0101FF04 05300301 01FF300D\n  06092A86 4886F70D\
+          \ 01010D05 00038201 0100D5A5 17E96A08 07B8E6EF 2254FAFC\n  6153723D 4EFBF023\
+          \ ADD893CE 3B770109 71665AF9 0F833EF3 9131B230 09A63B15\n  D4E851F4 6510B780\
+          \ 9A614665 B61469F4 91F06ECC D8CE7E51 C528B8B9 0A54281C\n  DC50F7A5 0DECF2CE\
+          \ 438BB454 7F0E4353 28373279 5F0B8485 C128717B 1B670930\n  D2A045DE 83EACE69\
+          \ 2384E9D2 4CA97BC3 90DDE9C9 44D966AF 9C5AE1F0 D60D5720\n  F4E97B29 94A9EC35\
+          \ AC92F30E C6D93CEE 1B45EFF6 FAF6CBDF 38FD1DD3 66167D7F\n  3ED521CD A16DA749\
+          \ 7EBDD04F A0945394 D341CF74 4D8C3EC5 86979FBE 88F0E95B\n  65BEFC35 1D2BC0B4\
+          \ C36BC681 5ABB47E4 CAA0F0FA 3631E5E7 24A1D222 D208D3EF\n  2D98CF60 F07097D2\
+          \ FE53125A 08BD4B4C C9E7\n  \tquit\n!\nenable secret 9 $9$V6TaFjonSG25QU$8.yxUpWIdGnwj2au9Z6/kMwQg/zSzl3EtrpjpC5BppM\n\
+          !\n! EEM Applet to add SSH Key Automatically\nevent manager applet do-ssh\
+          \ authorization bypass\nevent timer cron cron-entry \"@reboot\" maxrun 130\n\
+          action 01 wait 10\naction 02 cli command \"enable\"\naction 11 cli command\
+          \ \"crypto key generate rsa modulus 2048\"\naction 20 cli command \"config\
+          \ t\"\naction 21 cli command \"no event manager applet do-ssh\"\naction\
+          \ 22 cli command \"end\"\naction 23 cli command \"write mem\"\n!\n!\ninterface\
+          \ Ethernet0/0\n ip address 192.168.1.1 255.255.255.0\n!\ninterface Ethernet0/1\n\
+          \ ip address 10.1.1.1 255.255.255.0\n!\ninterface Ethernet0/2\n no ip address\n\
+          \ shutdown\n!\ninterface Ethernet0/3\n no ip address\n shutdown\n!\n!\n\
+          !\n!\nline con 0\n exec-timeout 0 0\n logging synchronous\nline aux 0\n\
+          line vty 0 4\n exec-timeout 0 0\n login\n transport input ssh\n!\n!\n!\n\
+          !\nend"
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n0
+    image_definition: null
+    label: R1
+    node_definition: iol-xe
+    parameters: {}
+    ram: null
+    tags: []
+    x: -120
+    y: 80
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: tac_plus.conf
+        content: |-
+          key = Cisco123!
+          accounting file = /var/log/tacplus-acct.log
+          acl = default {
+            permit = 0.0.0.0
+          }
+          host = 0.0.0.0 {
+            prompt = "TACACS+ auth: "
+          }
+          group = netadmin {
+            default service = permit
+            service = exec {
+              priv-lvl = 15
+            }
+          }
+          group = netoper {
+            default service = permit
+            service = exec {
+              priv-lvl = 1
+            }
+          }
+          user = $enab15$ {
+            login = cleartext admin123
+          }
+          user = tacadmin {
+            login = cleartext admin123
+            member = netadmin
+          }
+          user = tacoper {
+            login = cleartext oper123
+            member = netoper
+          }
+      - name: boot.sh
+        content: |-
+          # insert more commands here
+          ip address add dev eth0 192.168.1.20/24
+          ip link set dev eth0 up
+          ip route add default via 192.168.1.1
+
+          #
+          # keep the next line to indicate that the machine is ready
+          echo "READY" >/dev/console
+          exit 0
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: TACSRV
+    node_definition: tacplus
+    parameters: {}
+    ram: null
+    tags:
+      - servers
+    x: 120
+    y: 80
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i1
+        label: eth1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i2
+        label: eth2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i3
+        label: eth3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: node.cfg
+        content: |-
+          # this is a shell script which will be sourced at boot
+          hostname PC1
+          # configurable user account
+          USERNAME=cisco
+          PASSWORD=cisco
+          ip address add 10.1.1.10/24 dev eth0
+          ip route add default via 10.1.1.1
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n2
+    image_definition: null
+    label: PC1
+    node_definition: alpine
+    parameters: {}
+    ram: null
+    tags: []
+    x: -360
+    y: 80
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+links:
+  - id: l0
+    n1: n2
+    n2: n0
+    i1: i0
+    i2: i2
+    conditioning: {}
+    label: alpine-0-eth0<->iol-0-Ethernet0/1
+  - id: l1
+    n1: n0
+    n2: n1
+    i1: i1
+    i2: i0
+    conditioning: {}
+    label: R1-Ethernet0/0<->TACSRV-eth0
+lab:
+  description: ''
+  notes: |-
+    **CCNA Exam Prep: Back to Networking Basics with Hank Preston and Patrick Gargano -- Season 3**
+
+    # Managing Network Access with Authentication, Authorization, and Accounting
+
+
+
+    Related CCNA v1.1 exam topic:
+    * 2.8  Describe network device management access (Telnet, SSH, HTTP, HTTPS, console, TACACS+/RADIUS, and cloud managed)
+    * 5.3 Configure and verify device access control using local passwords
+    * 5.8 Compare authentication, authorization, and accounting concepts
+
+    In this lab, you will explore how to:
+    * Configure a default authentication and authorization method
+    * Configure a named authentication and authorization method
+    * Configure server-based AAA using TACACS+
+    * Configure server-based AAA using RADIUS
+
+    ## Setup and Scenario
+    In this set of lab-based demonstrations, you are a network engineer tasked with exploring different ways that AAA can be enabled on a Cisco router.
+
+    ### Knowledge Check
+
+    In networking, AAA stands for:
+    * Authentication
+    * Authorization
+    * Accounting
+
+    AAA is a framework for controlling access to network resources:
+
+    * Authentication: Verifies who you are (username/password, certificates, biometrics)
+    * Authorization: Determines what you're allowed to do (access permissions, resource limits)
+    * Accounting: Tracks what you did (logging usage, session duration, data transferred for billing/auditing)
+
+
+    *Be sure to **START** the lab before continuing*
+
+    > Note: The credentials for all devices are **cisco / cisco**
+
+    ## Part 1: Configure a default authentication and authorization method
+    Before we start testing RADIUS and TACACS+ AAA services later in the lab, let's setup a default authentication and authorization method for R1's console access. This method will only use the enable secret password for access to the CLI. By doing this, we can ensure we won't lose access to the device if something goes wrong with our AAA configuration in Part 3 and Part 4.
+
+    ### Step 1
+    By default, AAA is not enabled. Start by enabling AAA functions on the router.
+
+    <pre>
+    R1# <b>configure terminal</b>
+    R1(config)# <b>aaa new-model</b>
+    </pre>
+
+    When enabling AAA globally, the routers's local login passwords are disabled, if any were configured.
+
+    ### Step 2
+    A single named method list allows you to configure up to four AAA methods for a given operation on the device. These methods will be used in the order they are configured. If any method results in a rejection, then the attempt fails. If the method is unavailable, then the next configured method will be used.
+
+    Method lists are named with either a custom name or the name ``default``. A custom-named method list must be explicitly configured. A default method list applies to all device lines (console, VTY, AUX), without any additional configuration.
+
+    Let's start by creating a default method list for login that uses the enable password.
+
+    <pre>
+    R1(config)# <b>aaa authentication login default enable</b>
+    </pre>
+
+    Because this method list is the default for the login process, it is now in effect for every possible type of login, without any additional configuration. Issue the ``show run | section line con`` command and note that the ``login`` command is not present. Instead, the default method will "intercept" login attempts.
+
+    <pre>
+    R1# <b>show run | section line con</b>
+    line con 0
+     exec-timeout 0 0
+     logging synchronous
+    R1#
+    </pre>
+
+    Completely log out of the console session, and then try to log back in. You should be prompted for a password only. Enter the enable secret password, which is configured as ``cisco``.
+
+    <pre>
+    R1(config)# <b>exit</b>
+    R1# <b>exit</b>
+
+
+    R1 con0 is now available
+
+    Press RETURN to get started.
+
+
+    User Access Verification
+
+    Password: <i>(cisco)</i>
+
+    R1> <b>enable</b>
+    Password: <i>(cisco)</i>
+    R1</pre>
+
+    ### Step 3
+    AAA authorization is disabled on the console by default. We can enable it manually but you should be careful because a misconfiguration could lock you out of the device entirely through the console port.
+
+    <pre>
+    R1(config)# <b>aaa authorization console</b>
+    </pre>
+
+    **_TIP:_** In a production network, you can use the ``reload in`` command to ensure that any AAA configuration errors don't result in locking you out of the device.
+
+    ### Step 4
+    Next we will enable authorization for EXEC shell access, using the default method list to authorize users for privileged EXEC mode access. This configuration enforces that after a user is authenticated they will have permission to enter privileged EXEC mode based solely on the enable secret password.
+
+    The command ``aaa authorization exec default if-authenticated`` configures a network device to allow any user access to EXEC shell commands, provided they have already been successfully authenticated. This command simplifies authorization by relying on successful login, which means the device doesn't need to perform a separate, detailed authorization check for EXEC sessions
+
+    <pre>
+    R1(config)# <b>aaa authorization exec default if-authenticated</b>
+    </pre>
+
+    ### Step 5
+    Let's verify the complete config for Part 1.
+
+    <pre>
+    R1# <b>show run | section aaa</b>
+    aaa new-model
+    aaa authentication login default enable
+    aaa authorization console
+    aaa authorization exec default if-authenticated
+    aaa session-id common
+    </pre>
+
+    Let's test if our initial AAA config for the default method is working. First, enable console logging and then enable AAA debugging for authentication and authorization. You will then completely log out of the console and log back in.
+
+    <pre>
+    R1(config)# <b>logging console</b>
+    R1(config)# <b>exit</b>
+    R1# <b>debug aaa authentication</b>
+    AAA Authentication debugging is on
+    R1# <b>debug aaa authorization</b>
+    AAA Authorization debugging is on
+    R1# <b>exit</b>
+
+
+    R1 con0 is now available
+
+    Press RETURN to get started.
+
+
+    *Nov 21 04:08:52.712: %SYS-5-CONFIG_I: Configured from console by console
+
+    User Access Verification
+
+    Password: <i>(cisco)</i>
+    *Nov 21 04:08:55.100: AAA/BIND(00000011): Bind i/f
+    *Nov 21 04:08:55.100: AAA/AUTHEN/LOGIN (00000011): Pick method list 'default'
+    *Nov 21 04:08:55.100: AAA/AUTHEN/ENABLE(00000011): Processing request action LOGIN
+    *Nov 21 04:08:55.100: AAA/AUTHEN/ENABLE(00000011): Done status GET_PASSWORD
+
+    R1>
+    *Nov 21 04:08:57.529: AAA/AUTHEN/ENABLE(00000011): Processing request action LOGIN
+    <mark>*Nov 21 04:08:57.578: AAA/AUTHEN/ENABLE(00000011): Done status PASS</mark>
+    *Nov 21 04:08:57.578: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: ] [Source: LOCAL] [localport: 0] at 04:08:57 UTC Fri Nov 21 2025
+    R1>en
+    Password: <i>(cisco)</i>
+    <mark>*Nov 21 04:08:57.578: AAA/AUTHOR (00000011): Method=If-authen for method list id=00000000Skip author</mark>
+    *Nov 21 04:08:58.934: AAA: parse name=tty0 idb type=-1 tty=-1
+    *Nov 21 04:08:58.934: AAA: name=tty0 flags=0x11 type=4 shelf=0 slot=0 adapter=0 port=0 channel=0
+    *Nov 21 04:08:58.934: AAA/MEMORY: create_user (0x700B65680D00) user='NULL' ruser='NULL' ds0=0 port='tty0' rem_addr='async' authen_type=ASCII service=ENABLE priv=15 initial_task_id='0', vrf= (id=0)
+    *Nov 21 04:08:58.934: AAA/AUTHEN/START (297861893): port='tty0' list='' action=LOGIN service=ENABLE
+    *Nov 21 04:08:58.934: AAA/AUTHEN/START (297861893): console enable - default to enable password (if any)
+    *Nov 21 04:08:58.934: AAA/AUTHEN/START (297861893): Method=ENABLE
+    *Nov 21 04:08:58.934: AAA/AUTHEN (297861893): status = GETPASS
+    R1#
+    *Nov 21 04:09:00.239: AAA/AUTHEN/CONT (297861893): continue_login (user='(undef)')
+    *Nov 21 04:09:00.239: AAA/AUTHEN (297861893): status = GETPASS
+    *Nov 21 04:09:00.239: AAA/AUTHEN/CONT (297861893): Method=ENABLE
+    <mark>*Nov 21 04:09:00.284: AAA/AUTHEN (297861893): status = PASS</mark>
+    *Nov 21 04:09:00.284: AAA/MEMORY: free_user (0x700B65680D00) user='NULL' ruser='NULL' port='tty0' rem_addr='async' authen_type=ASCII service=ENABLE priv=15 vrf= (id=0)
+    R1#
+    </pre>
+    You can see in the output that there were two authentication processes (one for user EXEC and one for privileged EXEC) and that the authorization process was skipped since we were successfully authenticated.
+
+    ## Part 2: Configure a named authentication and authorization method
+    In Part 2, we will configure a named method and use it for VTY access instead of relying on the default method configured in Part 1. We will call this method REMOTE-ACCESS and we will configure it to use a local username database for authentication and authorization.
+
+    ### Step 1
+    First, let's configure a local user named ``admin`` with a secret password of ``adminpass``.
+
+    <pre>
+    R1(config)# <b>username admin secret adminpass</b>
+    </pre>
+
+    ### Step 2
+    Next, setup the named method for both authentication and authorization to use the local database only.
+
+    <pre>
+    R1(config)# <b>aaa authentication login REMOTE-ACCESS local</b>
+    R1(config)# <b>aaa authorization exec REMOTE-ACCESS local</b>
+    </pre>
+
+    If the previous ``debug`` commands are still active, you will see syslog messages in response to you adding these two commands.
+
+    ### Step 3
+    Next enable authentication and authorization on the VTY lines to use the named method list REMOTE-ACCESS instead of the previously configured default method.
+
+    <pre>
+    R1(config)# <b>line vty 0 4</b>
+    R1(config-line)# <b>login authentication REMOTE-ACCESS</b>
+    R1(config-line)# <b>authorization exec REMOTE-ACCESS</b>
+    </pre>
+
+    ### Step 4
+    To test that your remote access is configured correctly, open a console connection to PC1 and establish an SSH session to R1 using the local database as login credentials.
+    Enter ``yes`` when asked about accepting the RSA key.
+
+    <pre>
+    PC1:~$ <b>ssh admin@10.1.1.1</b>
+    The authenticity of host '10.1.1.1 (10.1.1.1)' can't be established.
+    RSA key fingerprint is SHA256:z4NlXzDZisKi7GI5sClcIQ20v50lYdK9aK+73ZJyRaA.
+    This key is not known by any other names.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? <b>yes</b>
+    Warning: Permanently added '10.1.1.1' (RSA) to the list of known hosts.
+    (admin@10.1.1.1)
+    Password: <i>(adminpass)</i>
+
+
+    R1>
+    </pre>
+
+    Notice that the admin user was granted access to user EXEC mode.
+
+    If you return to the R1 console and still have the debug commands enabled, you should see the following syslog messages:
+
+    <pre>
+    *Nov 21 22:55:59.947: %SSH-5-SSH2_SESSION: SSH2 Session request from <mark>10.1.1.10</mark> (tty = 0) using crypto cipher 'chacha20-poly1305@openssh.com', hmac 'hmac-sha2-256-etm@openssh.com' Succeeded
+    R1(config-line)#
+    *Nov 21 22:56:00.150: AAA/BIND(00000012): Bind i/f
+    *Nov 21 22:56:00.150: AAA/AUTHEN/LOGIN (00000012): Pick method list <mark>'REMOTE-ACCESS'</mark>
+    R1(config-line)#
+    *Nov 21 22:56:02.751: %SEC_LOGIN-5-LOGIN_SUCCESS: <mark>Login Success [user: admin]</mark> [Source: 10.1.1.10] [localport: 22] at 22:56:02 UTC Fri Nov 21 2025
+    *Nov 21 22:56:02.751: %SSH-5-SSH2_USERAUTH: User 'admin' authentication for SSH2 Session from 10.1.1.10 (tty = 0) using crypto cipher 'chacha20-poly1305@openssh.com', hmac 'hmac-sha2-256-etm@openssh.com' Succeeded
+    R1(config-line)#
+    *Nov 21 22:56:02.753: AAA/AUTHOR (0x12): Pick method list 'REMOTE-ACCESS'
+    *Nov 21 22:56:02.753: AAA/AUTHOR/EXEC(00000012): processing AV cmd=
+    *Nov 21 22:56:02.753: AAA/AUTHOR/EXEC(00000012): processing AV <mark>priv-lvl=1</mark>
+    *Nov 21 22:56:02.753: AAA/AUTHOR/EXEC(00000012): Authorization successful
+    </pre>
+
+    The output above confirms the following:
+    * An SSH session was established from 10.1.1.10
+    * The REMOTE-ACCESS method was selected for authentication
+    * Login was established using the ``admin`` username
+    * Access to priv-lvl 1 (user EXEC) was authorized
+
+    Why was the admin user only granted a ``priv-lvl`` of 1? Let's see:
+
+    <pre>
+    R1# <b>show run all | s username</b>
+    username admin <mark>privilege 1</mark> secret 9 $9$8lOCJ4JfIfaDFU$avS7RHOkkrHABVZwen0da0ACKvzvQLp2AS142TzfIEI
+    R1#
+    </pre>
+
+    Notice that by default, when we entered the ``username`` command, our admin user received a privileged level of 1.
+
+    Perhaps for an admin user we would prefer that they have direct access to privileged EXEC mode when logging into the VTY lines. To accomplish this, we need to modify the local database configuration. We will re-enter the username command but this time we will specify a privileged EXEC level of 15 for the admin user.
+
+    First, disconnect the SSH session from PC1 before continuing. Then enter the following command on R1 to override the current admin user configuration:
+
+    <pre>
+    R1(config)# <b>username admin <mark>privilege 15</mark> algorithm-type scrypt secret adminpass</b>
+    R1(config)#
+    *Nov 21 23:05:59.653: %AAA-6-USER_PRIVILEGE_UPDATE: username: admin privilege updated with priv-15
+    </pre>
+
+    Again, notice the AAA syslog message when you modify the privilege level of the user.
+
+    From PC1, establish a new SSH session with R1 to test the increase in privilege.
+
+    <pre>
+    PC1:~$ <b>ssh admin@10.1.1.1</b>
+    (admin@10.1.1.1) Password: <i>(cisco)</i>
+
+    R1#
+    </pre>
+
+    The prompt shows that the admin user now has direct access to privileged EXEC mode when establishing an SSH session with R1.
+
+    If you return once again to the R1 console and you should see a syslog message confirming that level 15 access was authorized:
+
+    ``*Nov 22 02:07:52.351: AAA/AUTHOR/EXEC(00000013): processing AV priv-lvl=15``
+
+    Disconnect the SSH connection to R1 before continuing to Part 3 of the lab.
+
+    ## Part 3: Configure server-based AAA using TACACS+
+    So far, we've configured authentication and authorization on R1 for console and VTY access. But the local authentication and authorization used for VTY access is not very scalable, because the configuration has to be repeated on all network devices and any changes to the AAA policy must then be updated individually on all network devices. Using a centralized AAA server is much more scalable. Policies are defined centrally on the server. Updates that are made to the centralized policy are available to all network devices. Also, using centralized AAA servers supports the use of the third "A": accounting.
+
+    In the topology, the TACACS+ server is a container in CML that is hosting the free <b>tacplus</b> software. If you click the TACSRV icon and select the CONFIG tab, you can view the ``tac_plus.conf`` file which includes the following important parameters:
+
+    * TACACS+ shared secret key: Cisco123!
+    * Admin user credentials: tacadmin / admin123 / privilege level 15
+    * Network operator credentials: tacoper / oper123 / privilege level 1
+    * TCP Port 49
+
+    ### Step 1
+    The first step in configuring AAA with TACACS+ on R1 is to define the connection parameters of the TACACS+ server.
+
+    <pre>
+    R1(config)# <b>tacacs server TACSRV</b>
+    R1(config-server-tacacs)# <b>address ipv4 192.168.1.20</b>
+    R1(config-server-tacacs)# <b>key Cisco123!</b>
+    R1(config-server-tacacs)# <b>single-connection</b>
+    R1(config-server-tacacs)# <b>exit</b>
+    </pre>
+
+    **_NOTE:_** You will receive a warning message that the option to use a cleartext password will be deprecated in the future. In a production network you would typically want to use an encrypted shared secret key.
+
+    The ``single-connection`` option causes the device to maintain a single TCP connection to the TACACS+ server. This cuts down on connections to the AAA server and can help to speed up the AAA process between the device and the server.
+
+    ### Step2
+    Next we need to define a TACACS+ server group that will include the TACSRV device configured in Step 1. A server group allows you to include multiple AAA servers for redundancy.
+
+    <pre>
+    R1(config)# <b>aaa group server tacacs+ TACSRVGRP</b>
+    R1(config-sg-tacacs+)# <b>server name TACSRV</b>
+    R1(config-sg-tacacs+)# <b>exit</b>
+    </pre>
+
+    ### Step 3
+    Let's perform a simple verification step before testing our AAA configuration with an actual SSH login attempt. We will use the ``test`` command to trigger an authentication attempt for the ``tacadmin`` user. The ``legacy`` keyword refers to the default TCP port 49 that TACACS+ uses. If you still have the ``debug`` commands active, you will see syslog messages confirming a successful authentication.
+
+    <pre>
+    R1# <b>test aaa group TACSRVGRP tacadmin admin123 legacy</b>
+    Attempting authentication test to server-group TACSRVGRP using tacacs+
+
+    *Nov 28 18:14:25.475: AAA/SG/TEST:Invoked SPI services for PROXY_START and PROXY_STOP
+    *Nov 28 18:14:25.478: AAA: parse name=<no string> idb type=-1 tty=-1
+    *Nov 28 18:14:25.478: AAA/MEMORY: create_user (0x7F2D5F5BDEF8) user='tacadmin' ruser='NULL' ds0=0 port='' rem_addr='NULL' authen_type=ASCII service=LOGIN priv=1 initial_task_id='0', vrf= (id=0)
+    *Nov 28 18:14:25.478: TAC+: send AUTHEN/START packet ver=192 id=39248394
+    <mark>User was successfully authenticated.</mark>
+
+    R1#
+    *Nov 28 18:14:27.678: TAC+: ver=192 id=39248394 received AUTHEN status = GETPASS
+    *Nov 28 18:14:27.678: TAC+: send AUTHEN/CONT packet id=39248394
+    *Nov 28 18:14:27.878: TAC+: ver=192 id=39248394 received AUTHEN status = PASS
+    *Nov 28 18:14:27.881: AAA/MEMORY: free_user (0x7F2D5F5BDEF8) user='tacadmin' ruser='NULL' port='' rem_addr='NULL' authen_type=ASCII service=LOGIN priv=1 vrf= (id=0)
+    </pre>
+
+    ### Step 4
+    Next we will overwrite the current REMOTE-ACCESS authentication and authorization method lists and update them to first use the newly defined TACACS+ server group, and use the local database second if the server is unresponsive.
+
+    <pre>
+    R1(config)# <b>aaa authentication login REMOTE-ACCESS group TACSRVGRP local</b>
+    R1(config)# <b>aaa authorization exec REMOTE-ACCESS group TACSRVGRP local</b>
+    </pre>
+
+    ### Step 5
+    Finally, we will enable some accounting when a user enters (starts) or exits (stops) the EXEC shell, and when a level 1 or level 15 command is entered at the EXEC shell. Accounting also needs to be applied to the VTY lines for EXEC access and the commands entered.
+
+    Let's also enable AAA accounting debugging. We should now have all AAA debugging commands active.
+
+    <pre>
+    R1(config)# <b>aaa accounting exec REMOTE-ACCESS start-stop group TACSRVGRP</b>
+    R1(config)# <b>aaa accounting commands 1 REMOTE-ACCESS start-stop group TACSRVGRP</b>
+    R1(config)# <b>aaa accounting commands 15 REMOTE-ACCESS start-stop group TACSRVGRP</b>
+    R1(config)# <b>line vty 0 4</b>
+    R1(config-line)# <b>accounting exec REMOTE-ACCESS</b>
+    R1(config-line)# <b>accounting commands 1 REMOTE-ACCESS</b>
+    R1(config-line)# <b>accounting commands 15 REMOTE-ACCESS</b>
+    R1(config-line)# <b>end</b>
+    R1# <b>debug aaa accounting</b>
+    </pre>
+
+    ### Step 6
+    Now return to the PC1 console and establish an SSH session with R1 using the ``tacoper`` username. Notice that this user receives level 1 user EXEC access.
+
+    <pre>
+    PC1:~$ <b>ssh tacoper@10.1.1.1</b>
+    (tacoper@10.1.1.1) Password: <i>(oper123)</i>
+    <mark>R1></mark> <b>exit</b>
+    Connection to 10.1.1.1 closed by remote host.
+    Connection to 10.1.1.1 closed.
+    </pre>
+
+    Next, establish an SSH sessions wth R1 using the ``tacadmin`` username. Notice that the ``tacadmin`` user receives level 15 privileged EXEC access.
+
+    <pre>
+    PC1:~$ <b>ssh tacadmin@10.1.1.1</b>
+    (tacadmin@10.1.1.1) Password: <i>(admin123)</i>
+    <mark>R1#
+    </pre>
+
+    Keep this SSH session active but return to the R1 console You should see syslog messages confirming that ``tacadmin`` was successfully authenticated and authorized to ``priv-lvl`` 15. You should also see accounting messages indicating the start of an EXEC session.
+
+
+    ### Step 7
+    In this final verification step, you will run a few commands ``show`` commands from the SSH session. This will trigger some accounting activity. You will then investigate the accounting logs on the TACACS+ server.
+
+    From the PC1 SSH session to R1, execute the ``show ip int brief`` and ``show run`` commands.
+
+    Right-click the **TACSRV** icon in CML, select CONSOLE and then click the OPEN CONSOLE button. If you scroll up through the output, you should see a connection attempt from 192.168.1.1, a successful authentication of the ``tacadmin`` user, and a  successful level 15 authorization.
+
+    <pre>
+    connect from 192.168.1.1 [192.168.1.1]
+    login query for 'tacadmin' port tty2 from 192.168.1.1 accepted
+    connect from 192.168.1.1 [192.168.1.1]
+    Start authorization request
+    do_author: user='tacadmin'
+    user 'tacadmin' found
+    exec authorization request for tacadmin
+    exec is explicitly permitted by line 11
+    nas:service=shell (passed thru)
+    nas:cmd* (passed thru)
+    nas:absent, server:priv-lvl=15 -> add priv-lvl=15 (k)
+    added 1 args
+    out_args[0] = service=shell input copy discarded
+    out_args[1] = cmd* input copy discarded
+    out_args[2] = priv-lvl=15 compacted to out_args[0]
+    1 output args
+    authorization query for 'tacadmin' tty2 from 192.168.1.1 accepted
+    connect from 192.168.1.1 [192.168.1.1]
+    </pre>
+
+    More interestingly, if you right-click the **TACSRV** tab and select the Change Serial option, you can access the server's CLI on Serial Line 1. Press Enter to get the device prompt and type the following command to open the accounting log:
+
+    ``tail -f /var/log/tacplus-acct.log``
+
+    The last two entries in the log file should represent the two commands you typed earlier:
+
+    <pre>
+    Nov 24 02:41:31 192.168.1.1     tacadmin        tty2    10.1.1.10       stop    task_id=28      timezone=UTC    service=shell   priv-lvl=1 cmd=show ip interface brief <cr>
+    Nov 24 02:41:33 192.168.1.1     tacadmin        tty2    10.1.1.10       stop    task_id=30      timezone=UTC    service=shell   priv-lvl=15cmd=show running-config <cr>
+    </pre>
+
+    Notice that the ``show ip int brief`` command is ``priv-lvl`` 1, while the ``show running-config`` command is ``priv-lvl`` 15.
+
+
+    ## Part 4: Configure server-based AAA using RADIUS
+    In this last part of the lab, we'll go over the differences between RADIUS and TACACS+, and only describe how to configure it since the RADIUS server in CML does not currently work correctly.
+
+    As you already know, TACACS+ uses TCP (port 49), which provides reliable delivery. On the other hand RADIUS uses UDP (ports 1812 for auth, 1813 for accounting).
+
+    TACACS+ encrypts the entire body of the packet, while RADIUS only encrypts the password in the access-request packet, leaving the rest of the packet vulnerable.
+
+    TACACS+ separates authentication, authorization, and accounting into distinct processes, giving you more granular control. RADIUS combines authentication and authorization - you can't authenticate without also receiving authorization information.
+
+    Finally, RADIUS is standardized in [RFC 2865](https://datatracker.ietf.org/doc/html/rfc2865) and widely supported across many vendors, while TACACS+ was originally a Cisco proprietary protocol but is now defined in [RFC 8907](https://datatracker.ietf.org/doc/html/rfc8907) and supported across multiple vendors.
+
+    When it comes to configuring RADIUS, the steps are identical to what we did for TACACS+ except that you need to use the commands to define a RADIUS server, RADIUS server group, and a method list that references the RADIUS server group, as follows:
+
+    <pre>
+    R1(config)# radius server RADSRV
+    R1(config-radius-server)# address ipv4 192.168.1.20
+    R1(config-radius-server)# key Cisco123!
+    R1(config)# exit
+    R1(config)# aaa group server radius RADSRVGRP
+    R1(config-sg-radius)# server name RADSRV
+    R1(config-sg-radius)# exit
+    R1(config)# aaa authentication login REMOTE-ACCESS group RADSRVGRP local
+    </pre>
+
+    <b>Congratulations!</b> You have completed the lab! You learned all the ways AAA can be delpoyed on a Cisco router, from using a local database, a TACACS+ server, and a RADIUS server.
+  title: CCNA Prep 2025 S3E4 AAA
+  version: 0.3.0

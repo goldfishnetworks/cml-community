@@ -36,9 +36,13 @@ The current hosts of the CCNA Prep Program are:
 
 1. [Securing the Switch with Essential Layer 2 Protections](s3e1/README.md)
 1. [Fundamentals of ACLs](s3e2/README.md)
-1. Advanced ACL Exploration *Coming Soon*
-1. Managing Network Access with Authentication, Authorization, and Accounting *Coming Soon*
-
-<!-- 
 1. [Advanced ACL Exploration](s3e3/README.md)
-1. [Managing Network Access with Authentication, Authorization, and Accounting](s3e4/README.md) -->
+1. [Managing Network Access with Authentication, Authorization, and Accounting](s3e4/README.md)
+
+## Bonus Season 1 (Summer 2026) - Exam Preparation
+
+1. How to Navigate Practical Exam Tasks
+    * [Lablet 1](sb1e1-lablet1/README.md)
+    * [Lablet 2](sb1e1-lablet2/README.md)
+    * [Lablet 3](sb1e1-lablet3/README.md)
+    * [Lablet 4](sb1e1-lablet4/README.md)

@@ -1,0 +1,764 @@
+annotations:
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#000000'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      VLAN ID  Name      Network
+      10       Desktops  10.5.10.0/24
+      20       VoIP      10.5.20.0/24
+      50       Branch    10.5.50.0/24
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -80.0
+    y1: 240.0
+    z_index: 1
+  - border_color: '#23D1E8'
+    border_style: ''
+    color: '#FFFFFFFF'
+    rotation: 0
+    thickness: 3
+    type: ellipse
+    x1: -240.0
+    y1: 120.0
+    x2: 160.0
+    y2: 160.0
+    z_index: 6
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#23D1E8'
+    rotation: 0
+    text_bold: false
+    text_content: OSPF
+    text_font: monospace
+    text_italic: false
+    text_size: 26
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -377.5034393423942
+    y1: 131.66488330394372
+    z_index: 7
+  - border_color: '#808080FF'
+    border_radius: 0
+    border_style: ''
+    color: '#D0D0D0'
+    rotation: 0
+    thickness: 1
+    type: rectangle
+    x1: -480.0
+    y1: -160.0
+    x2: 520.0
+    y2: 80.0
+    z_index: 8
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Note: Gray blocks indicate devices that are fully
+      pre-configured and should NOT be accessed while
+      completing this lablet's tasks.
+    text_font: monospace
+    text_italic: false
+    text_size: 12
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -462.0027514739153
+    y1: -152.98884124467662
+    z_index: 9
+  - border_color: '#808080FF'
+    border_style: ''
+    color: '#DADADA'
+    rotation: 0
+    thickness: 1
+    type: ellipse
+    x1: -240.0
+    y1: 120.0
+    x2: 40.0
+    y2: 40.0
+    z_index: 15
+  - border_color: '#808080FF'
+    border_style: ''
+    color: '#DADADA'
+    rotation: 0
+    thickness: 1
+    type: ellipse
+    x1: -120.0
+    y1: 0.0
+    x2: 40.0
+    y2: 40.0
+    z_index: 15
+  - border_color: '#808080FF'
+    border_style: ''
+    color: '#DADADA'
+    rotation: 0
+    thickness: 1
+    type: ellipse
+    x1: -80.0
+    y1: 400.0
+    x2: 40.0
+    y2: 40.0
+    z_index: 15
+  - border_color: '#808080FF'
+    border_style: ''
+    color: '#DADADA'
+    rotation: 0
+    thickness: 1
+    type: ellipse
+    x1: -240.0
+    y1: 440.0
+    x2: 40.0
+    y2: 40.0
+    z_index: 15
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: true
+    text_content: |-
+      Note: Some devices in the topology represent desktops,
+      servers, phones, access points, etc.  These devices are
+      IOL routers as placeholders and hosts on the network.
+      Typically configuration is NOT required on these devices,
+      but you may use CLI access to test and verify with ping.
+    text_font: monospace
+    text_italic: false
+    text_size: 10
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -440.0
+    y1: 520.0
+    z_index: 9
+  - border_color: '#00000000'
+    border_style: ''
+    color: '#808080FF'
+    rotation: 0
+    text_bold: false
+    text_content: |-
+      Note: If on CML Free, do not start Desk-8
+      or Phone-9 to stay within 5 node license limit.
+    text_font: monospace
+    text_italic: true
+    text_size: 10
+    text_unit: pt
+    thickness: 1
+    type: text
+    x1: -178.5968102822925
+    y1: 456.6152080549258
+    z_index: 16
+smart_annotations: []
+nodes:
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname R1
+          !
+          ! In order to avoid entering a configuration dialog on boot, please
+          ! ensure that all interfaces have some IP configuration present here
+          ! such as the example below:
+          !
+          interface range Ethernet 0/0 - 3
+           no ip address
+           shutdown
+          !
+          no logging console
+          no ip domain lookup
+          !
+          !
+          interface e0/0
+           no shut
+           ip address 10.4.1.1 255.255.255.0
+          interface e0/1
+           no shut
+           ip address 10.1.101.1 255.255.255.0
+          interface e0/2
+           no shut
+           ip address 10.1.102.1 255.255.255.0
+          interface e0/3
+           no shut
+           ip address 10.1.103.1 255.255.255.0
+          !
+          interface loop0
+           ip address 192.168.0.1 255.255.255.255
+          interface loop1
+           ip address 192.168.10.1 255.255.255.255
+          !
+          !
+          ip dhcp pool Desktop
+           network 10.5.10.0 /24
+           default-router 10.5.10.1
+           domain-name example.com
+           lease 0 12
+           exit
+          ip dhcp pool Branch
+           network 10.5.50.0 /24
+           default-router 10.5.50.1
+           domain-name example.com
+           lease 0 12
+           exit
+          !
+          ip dhcp excluded-address 10.5.10.1 10.5.10.10
+          ip dhcp excluded-address 10.5.50.1 10.5.50.10
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n0
+    image_definition: null
+    label: R1
+    node_definition: iol-xe
+    parameters: {}
+    priority: 30
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -360
+    y: 0
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname Sw4
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: Sw4
+    node_definition: ioll2-xe
+    parameters: {}
+    priority: 30
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -240
+    y: 120
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname R2
+          !
+          ! In order to avoid entering a configuration dialog on boot, please
+          ! ensure that all interfaces have some IP configuration present here
+          ! such as the example below:
+          !
+          interface range Ethernet 0/0 - 3
+           no ip address
+           shutdown
+          !
+          interface e0/0
+           no shut
+           ip address 10.4.1.2 255.255.255.0
+          interface e0/1
+           no shut
+           ip address 10.2.201.1 255.255.255.0
+          interface e0/2
+           no shut
+           ip address 10.2.202.1 255.255.255.0
+          interface e0/3
+           no shut
+           ip address 10.2.203.1 255.255.255.0
+          !
+          interface loop0
+           ip address 192.168.0.2 255.255.255.255
+          interface loop1
+           ip address 192.168.10.2 255.255.255.255
+          !
+          !
+          router ospf 1
+           router-id 192.168.0.2
+           network 10.2.0.0 0.0.255.255 area 0
+           network 10.4.1.0 0.0.0.255 area 0
+           exit
+          !
+          interface e0/0
+           ip ospf priority 50
+           exit
+          !
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n2
+    image_definition: null
+    label: R2
+    node_definition: iol-xe
+    parameters: {}
+    priority: 30
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -120
+    y: 0
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname Sw5
+          !
+          no ip domain lookup
+          vtp mode transparent
+          no logging console
+          !
+          interface vlan 10
+           no shut
+           ip address 10.5.10.1 255.255.255.0
+           exit
+          interface vlan 20
+           no shut
+           ip address 10.5.20.1 255.255.255.0
+           exit
+          interface vlan 50
+           no shut
+           ip address 10.5.50.1 255.255.255.0
+           exit
+          !
+          interface e0/0
+           no shut
+           no switchport
+           ip address 10.4.1.5 255.255.255.0
+           exit
+          !
+          interface loop0
+           ip address 192.168.0.5 255.255.255.255
+          interface loop1
+           ip address 192.168.10.5 255.255.255.255
+           exit
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n3
+    image_definition: null
+    label: Sw5
+    node_definition: ioll2-xe
+    parameters: {}
+    priority: 30
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -240
+    y: 280
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+      - id: i5
+        label: Ethernet1/0
+        mac_address: null
+        type: physical
+        slot: 4
+      - id: i6
+        label: Ethernet1/1
+        mac_address: null
+        type: physical
+        slot: 5
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname Branch-7
+          !
+          ! In order to avoid entering a configuration dialog on boot, please
+          ! ensure that all interfaces have some IP configuration present here
+          ! such as the example below:
+          !
+          interface range Ethernet 0/0 - 3
+           no ip address
+           shutdown
+          !
+          no ip domain lookup
+          no logging console
+          !
+          interface e0/0
+           no shut
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n4
+    image_definition: null
+    label: Branch-7
+    node_definition: iol-xe
+    parameters: {}
+    priority: 30
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -400
+    y: 400
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname Phone-8
+          !
+          ! In order to avoid entering a configuration dialog on boot, please
+          ! ensure that all interfaces have some IP configuration present here
+          ! such as the example below:
+          !
+          interface range Ethernet 0/0 - 3
+           no ip address
+           shutdown
+          !
+          no ip domain lookup
+          no logging console
+          !
+          interface e0/0
+           no shut
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n5
+    image_definition: null
+    label: Phone-9
+    node_definition: iol-xe
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -80
+    y: 400
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: |-
+          hostname Desk-8
+          !
+          ! In order to avoid entering a configuration dialog on boot, please
+          ! ensure that all interfaces have some IP configuration present here
+          ! such as the example below:
+          !
+          interface range Ethernet 0/0 - 3
+           no ip address
+           shutdown
+          !
+          no ip domain lookup
+          no logging console
+          !
+          interface e0/0
+           no shut
+           ip address dhcp
+          !
+          end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n6
+    image_definition: null
+    label: Desk-8
+    node_definition: iol-xe
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: -240
+    y: 440
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+links:
+  - id: l0
+    n1: n1
+    n2: n3
+    i1: i1
+    i2: i1
+    conditioning: {}
+    label: Sw4-Ethernet0/0<->Sw5-Ethernet0/0
+  - id: l1
+    n1: n1
+    n2: n0
+    i1: i2
+    i2: i1
+    conditioning: {}
+    label: Sw4-Ethernet0/1<->R1-Ethernet0/0
+  - id: l2
+    n1: n1
+    n2: n2
+    i1: i3
+    i2: i1
+    conditioning: {}
+    label: Sw4-Ethernet0/2<->R2-Ethernet0/0
+  - id: l3
+    n1: n3
+    n2: n4
+    i1: i2
+    i2: i1
+    conditioning: {}
+    label: Sw5-Ethernet0/1<->Desk-8-Ethernet0/0
+  - id: l4
+    n1: n3
+    n2: n6
+    i1: i5
+    i2: i1
+    conditioning: {}
+    label: Sw5-Ethernet1/0<->Desk-8-Ethernet0/0
+  - id: l5
+    n1: n3
+    n2: n5
+    i1: i6
+    i2: i1
+    conditioning: {}
+    label: Sw5-Ethernet1/1<->Phone-9-Ethernet0/0
+lab:
+  description: |-
+    This is a practice CCNA Exam Lablet designed to test skills on configuration, operations, and troubleshooting tasks from the CCNA Blueprint.
+
+    Find the list of tasks to complete in the CML Lab Guide, and use console access to the devices and apply configurations.
+  notes: |-
+    Update configurations by performing the following tasks:
+
+    **Task 1: Network Access**
+
+    * Create VLANs on **Sw5** using data from the table.
+    * Configure **Sw5** interface e0/1 as an access port in the *Branch* VLAN
+    * Configure **Sw5** interfaces e1/0-3 for:
+        * Data VLAN - *Desktops*
+        * Voice VLAN - *VoIP*
+
+    **Task 2: Dynamic Routing**
+
+    *Note: **R2** is correctly pre-configured for OSPF and this task.*
+
+    * Enable IPv4 OSPFv2 on **R1** and **Sw5** using process id 1.
+    * Ensure each OSPF router uses its *Loopback0* address as the Router ID.
+    * Configure OSPF routers to advertise all connected networks into area 0.
+        * *Note: Connected networks includes all physical, VLAN, and Loopback interfaces with IP addresses configured.*
+    * Ensure only **R1** and **R2** can ever be the designated router.
+        * **R1** must have the best chance of becoming the designated router.
+    * Configure **Sw5** so that it only attempts building OSPF adjacencies on interface e0/0
+
+    **Task 3: Layer 2 Security**
+
+    * Enable DHCP snooping on **Sw5** for the *Branch* and *Desktops* VLANs
+    * Ensure **Sw5** drops traffic from DHCP clients if the source MAC address doesn't match the snooped MAC address
+
+    **Task 4: DHCP**
+
+    *Note: **R1** is pre-configured as a DHCP server. Do NOT change any configuration on **R1** for this task.*
+
+    * Configure **Sw5** to forward DHCP requests from the *Branch* and *Desktops* VLANs to **R1** Loopback1 address.
+    * Configure **Branch-7** to use DHCP to assign an IPv4 address on interface e0/0.
+    * Ensure **Branch-7** uses the default route provided by DHCP.
+  title: CCNA Prep sB1ep01 - Lablet 4
+  node_staging:
+    enabled: false
+    start_remaining: true
+    abort_on_failure: false
+  version: 0.3.1
