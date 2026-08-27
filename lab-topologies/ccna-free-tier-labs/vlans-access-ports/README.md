@@ -1,0 +1,163 @@
+# VLAN Fundamentals: Creating & Assigning Access Ports
+
+A single access switch with four hosts attached. Your task: create VLAN 10 and VLAN 20, assign access ports to each, and validate intra-VLAN reachability and inter-VLAN isolation (no routing present).
+
+**5 nodes** (alpine, ioll2-xe) — runs on CML-Free  ·  about 45 minutes  ·  beginner
+
+## What you'll configure
+
+- Create VLANs on a Cisco Layer-2 switch and verify the VLAN database.
+- Assign switch access ports to specific VLANs for host segmentation.
+- Validate hosts in the same VLAN/subnet can communicate (ping).
+- Validate that hosts in different VLANs/subnets are isolated at Layer-2 (no routing).
+- Troubleshoot VLAN membership and port assignment using show commands and host-side tests.
+
+## Importing
+
+In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
+addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
+below are attached to the lab's Notes in CML, so they travel with the topology.
+
+## Tasks
+
+### Scenario
+You are the newly appointed network technician for BrightLeaf Studio, a small creative agency. Their designers often share large files over the LAN. Recently, the security team asked you to separate “Employee” endpoints from “Guest” endpoints on the office floor to reduce broadcast noise and enforce basic segmentation. There is only one Layer-2 access switch at this location. Your mission is to carve the flat network into two VLANs on that single switch, place the correct wall jacks into the right VLANs, and confirm that:
+- Employees can talk to other Employees in the same VLAN.
+- Guests can talk to other Guests in the same VLAN.
+- Guests and Employees are isolated from one another across VLANs (no router is present, so no inter-VLAN connectivity should exist).
+
+Success here reduces unnecessary broadcast traffic and prevents accidental access between user groups—an essential first step in any secure campus LAN design.
+
+### Prerequisites & Access
+- Level and time: Beginner · ~45 minutes
+- You will need: Cisco Modeling Labs, and room for 5 nodes (1 network device, 4 hosts). That fits the 5-node limit on CML Free.
+- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+
+### Access & credentials
+
+Open a device's console from the CML topology view (click the node, then **Console**).
+
+- **SW-BR-ACC1** — username `admin` / password `Lab@dmin1`.
+- **CLIENT10A, CLIENT10B, CLIENT20A, CLIENT20B** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+
+These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+
+### Topology Walkthrough
+- SW-BR-ACC1 (Layer-2 Access Switch): The single office switch where you will create VLANs and assign access ports.
+- CLIENT10A and CLIENT10B: Employee devices intended to live in VLAN 10 (10.10.10.0/24).
+- CLIENT20A and CLIENT20B: Guest devices intended to live in VLAN 20 (10.20.20.0/24).
+- There is no router and no trunk in this lab. Every host connects to a single dedicated access port on SW-BR-ACC1.
+- Expected end-state port roles:
+  - Ethernet0/0 and Ethernet0/1 → VLAN 10 (Employee)
+  - Ethernet0/2 and Ethernet0/3 → VLAN 20 (Guest)
+
+### IP Addressing Plan
+- VLAN 10 (Employees): 10.10.10.0/24
+  - CLIENT10A: 10.10.10.10/24
+  - CLIENT10B: 10.10.10.11/24
+  - No default gateway in this lab (no L3 device). Any pre-set default route on hosts will remain unused.
+- VLAN 20 (Guests): 10.20.20.0/24
+  - CLIENT20A: 10.20.20.10/24
+  - CLIENT20B: 10.20.20.11/24
+  - No default gateway in this lab (no L3 device).
+
+Note: Inter-VLAN routing is intentionally missing to demonstrate isolation by design.
+
+### Objectives Recap
+- Create two VLANs on a single Layer-2 switch and verify they exist.
+- Assign the correct access ports to each VLAN and bring them up.
+- Prove that hosts in the same VLAN can reach each other.
+- Prove that hosts in different VLANs cannot reach each other (no routing).
+- Use show commands and host-side tools to troubleshoot common mistakes.
+
+### Tasks
+1. Plan the VLANs
+   - What: Decide VLAN IDs and names for two groups: Employees and Guests. This lab requires the exact VLAN names `Users_10` for VLAN 10 and `Guests_20` for VLAN 20.
+   - Why: Clear naming helps operations and prevents misplacement later. Expect to use VLAN 10 for Employees and VLAN 20 for Guests.
+   - Watch for: Typos—the VLAN names are graded and must match exactly (`Users_10`, `Guests_20`), in addition to the VLAN IDs being correct.
+
+2. Create the VLANs on SW-BR-ACC1
+   - What: Add VLAN 10 and VLAN 20 to the switch VLAN database and name them exactly `Users_10` (VLAN 10) and `Guests_20` (VLAN 20) — this exact naming is required, not optional.
+   - Why: Ports cannot join a VLAN that does not exist on the switch.
+   - Watch for: Confirm the VLANs appear in the VLAN table after creation.
+
+3. Assign switch access ports to the correct VLANs
+   - What: Configure Ethernet0/0 and Ethernet0/1 as access ports in VLAN 10; configure Ethernet0/2 and Ethernet0/3 as access ports in VLAN 20.
+   - Why: Access mode binds a single untagged VLAN to a user-facing port; hosts do not tag frames.
+   - Watch for: Ensure ports are forced into access mode (not dynamic) so they don’t try to negotiate trunks.
+
+4. Enable edge-port best practices (graded on all four user-facing ports)
+   - What: Enable PortFast and BPDU Guard on all four user-facing ports.
+   - Why: PortFast speeds up host connectivity by bypassing STP listening/learning states, and BPDU Guard adds a safety net if someone accidentally plugs in a switch.
+   - Watch for: Use only on true host-facing ports, not on uplinks.
+
+5. Verify VLAN membership on the switch
+   - What: Use appropriate show commands to confirm: (a) VLANs exist, (b) ports are members of the right VLANs, and (c) interfaces are up.
+   - Why: The switch’s control-plane view should match your physical patching and logical intent.
+   - Watch for: Ports still in VLAN 1 or ports showing as trunk/dynamic instead of access.
+
+6. Validate reachability from the endpoints
+   - What: From the two Employee hosts, test Employee-to-Employee pings (same VLAN). From the two Guest hosts, test Guest-to-Guest pings (same VLAN). Finally, test at least one cross-VLAN ping (Employee to Guest) which must fail.
+   - Why: Proves Layer-2 segmentation works as intended and that no unintended routing is present.
+   - Watch for: Successful ARP and ping within a VLAN; failure with a clear error for cross-VLAN traffic.
+
+### Verification
+Run these checks from the end hosts after you apply the switch config:
+- From CLIENT10A (10.10.10.10):
+  - Ping CLIENT10B (10.10.10.11) → Expected: Success (same VLAN 10).
+  - Ping CLIENT20A (10.20.20.10) → Expected: Fail (no routing between VLANs).
+- From CLIENT20A (10.20.20.10):
+  - Ping CLIENT20B (10.20.20.11) → Expected: Success (same VLAN 20).
+  - Ping CLIENT10A (10.10.10.10) → Expected: Fail (no routing between VLANs).
+- On the switch (read-only checks):
+  - Verify VLANs and port assignments present and correct.
+  - Confirm access mode on all four ports and that each port shows up/up with a connected host.
+
+### Troubleshooting
+- Same-VLAN ping fails:
+  - On SW-BR-ACC1, confirm the VLAN exists and the port is configured as an access port in that VLAN. Ensure no port is still in VLAN 1.
+  - Check the host IP/mask. A wrong mask or wrong IP subnet will break ARP and pings.
+- Hosts can ping across VLANs (unexpected):
+  - Ensure there is no SVI for VLAN 10 or VLAN 20 with routing enabled, and that no external router is connected. This lab should be pure Layer-2.
+- One host isolated:
+  - Verify cable-to-port mapping matches your port configuration. A swapped cable can strand a host in the wrong VLAN.
+  - Check that the interface is up on the switch and not err-disabled. If using BPDU Guard, make sure the host isn’t sending BPDUs (rare on PCs).
+- Intermittent or slow convergence:
+  - If PortFast is not enabled on host ports, initial pings may time out as STP transitions. Enable PortFast on true edge ports to speed bring-up.
+
+### Completion Checklist
+Work through these before you call the lab done.
+- [ ] Create VLANs on a Cisco Layer-2 switch and verify the VLAN database.
+- [ ] Assign switch access ports to specific VLANs for host segmentation.
+- [ ] Validate hosts in the same VLAN/subnet can communicate (ping).
+- [ ] Validate that hosts in different VLANs/subnets are isolated at Layer-2 (no routing).
+- [ ] Troubleshoot VLAN membership and port assignment using show commands and host-side tests.
+- [ ] VLAN database is consistent across relevant switches.
+- [ ] Trunks permit the required VLANs.
+- [ ] Hosts in the same VLAN can communicate across the switched path.
+
+## Verifying your work
+
+Each of these is something you can prove from the device before calling the lab done.
+
+- [ ] SW-BR-ACC1 shows VLAN 10 and VLAN 20 present with the exact required names (`Users_10` and `Guests_20`).
+- [ ] Ethernet0/0 and Ethernet0/1 are access ports in VLAN 10; Ethernet0/2 and Ethernet0/3 in VLAN 20.
+- [ ] CLIENT10A can ping CLIENT10B successfully.
+- [ ] CLIENT20A can ping CLIENT20B successfully.
+- [ ] Cross-VLAN pings (e.g., CLIENT10A to CLIENT20A) fail as expected.
+- [ ] Switch MAC address table shows host MACs learned under the correct VLANs/ports.
+
+## If it doesn't work
+
+Once it works, these are worth breaking on purpose — each one produces a different symptom:
+
+- Port left in VLAN 1 by mistake causes same-VLAN ping to fail.
+- Port configured as dynamic or trunk instead of access causes unpredictable results.
+- Wrong IP/mask on a host prevents ARP and ping on the local VLAN.
+- Accidentally creating an SVI and enabling routing breaks the isolation goal.
+- Cabling mismatch: host plugged into a port assigned to the other VLAN.
+
+---
+
+Contributed by Goldfish Networks — https://goldfishnetworks.com/archive/vlan-fundamentals-creating-assigning-access-ports

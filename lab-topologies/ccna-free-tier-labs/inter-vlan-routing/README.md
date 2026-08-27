@@ -1,0 +1,133 @@
+# CCNA Inter-VLAN Routing: Two Clients Across a Router
+
+Deploy, verify, and troubleshoot end-to-end inter-VLAN L3 routing.
+
+**5 nodes** (alpine, iol-xe, ioll2-xe) — runs on CML-Free  ·  about 45 minutes  ·  beginner
+
+## What you'll configure
+
+- Configure access and trunk ports on Layer 2 switches.
+- Create and assign VLANs for different user segments.
+- Configure routed interfaces on a router for VLAN gateways.
+- Verify and troubleshoot trunk allow-list and VLAN transport issues.
+- Restore inter-VLAN connectivity between endpoints.
+
+## Importing
+
+In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
+addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
+below are attached to the lab's Notes in CML, so they travel with the topology.
+
+## Tasks
+
+# CCNA Inter-VLAN Routing: Two Clients Across a Router
+
+### Scenario
+Two client PCs sit on separate access switches and must reach each other through a router R1.
+
+- PC1 connects to SW1, PC2 connects to SW2, and each switch uplinks to R1.
+- PC1 belongs to VLAN 10 (192.168.10.0/24, gateway 192.168.10.1).
+- PC2 belongs to VLAN 20 (192.168.20.0/24, gateway 192.168.20.1).
+
+Out of the box nothing is configured, so PC1 cannot ping PC2. Your job is to build the VLANs, switch access ports, and the router's two routed interfaces so the two clients can communicate.
+
+### Prerequisites & Access
+- Level and time: Beginner · ~45 minutes
+- You will need: Cisco Modeling Labs, and room for 5 nodes (3 network devices, 2 hosts). That fits the 5-node limit on CML Free.
+- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+
+### Access & credentials
+
+Open a device's console from the CML topology view (click the node, then **Console**).
+
+- **PC1, PC2** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+
+These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+
+### Topology Walkthrough
+- **PC1** is an Alpine host on **SW1** Ethernet0/0. It is the VLAN 10 client (192.168.10.0/24).
+- **SW1** is a pure layer-2 switch. Its Ethernet0/1 uplinks to **R1** Ethernet0/0.
+- **PC2** is an Alpine host on **SW2** Ethernet0/0. It is the VLAN 20 client (192.168.20.0/24).
+- **SW2** uplinks from its Ethernet0/1 to **R1** Ethernet0/1.
+- **R1** is the only router, and there is **no trunk in this design**: each switch reaches R1 over its own access
+  link, so R1 routes between the two VLANs on two separate routed interfaces rather than 802.1Q subinterfaces.
+- **There is no link between SW1 and SW2.** Every packet from PC1 to PC2 has to be routed by R1 — which is exactly
+  what makes this an inter-VLAN routing exercise rather than a switching one.
+
+### IP Addressing Plan
+- VLANs in this lab: 10 (USERS-VLAN10), 20 (USERS-VLAN20)
+- R1
+  - Ethernet0/0: 192.168.10.1/24
+  - Ethernet0/1: 192.168.20.1/24
+- PC1: 192.168.10.10/24
+- PC2: 192.168.20.10/24
+
+### Tasks
+1. On SW1, create VLAN 10 and place BOTH its connected ports (to PC1 and to R1) into VLAN 10 as access ports.
+2. On SW2, create VLAN 20 and place BOTH its connected ports (to PC2 and to R1) into VLAN 20 as access ports.
+3. On R1, address the SW1-facing interface as 192.168.10.1/24 and the SW2-facing interface as 192.168.20.1/24, and bring both up.
+4. Address the clients (in each PC's console): PC1 = 192.168.10.10/24 with default gateway 192.168.10.1; PC2 = 192.168.20.10/24 with default gateway 192.168.20.1.
+
+### Setting a client address (Alpine)
+On the PC console:
+```
+ip addr add 192.168.10.10/24 dev eth0
+ip route add default via 192.168.10.1
+```
+
+### Verification
+From PC1, `ping 192.168.20.10` should succeed once every device is configured.
+
+### Troubleshooting
+- **PC1 cannot reach its own gateway (192.168.10.1).** On SW1, both ports matter: the port to PC1 *and* the uplink
+  port to R1 must be access ports in VLAN 10. If the uplink is left in the default VLAN, the host and the router
+  are in different broadcast domains and the gateway is unreachable. Then confirm R1 Ethernet0/0 carries the
+  address and is not shut.
+- **Each PC reaches its own gateway but not the far PC.** The near side is healthy and the far side is not: check
+  the OTHER switch's two ports are both in its VLAN, and that R1's second interface is addressed and up. On R1,
+  `show ip route` should list 192.168.10.0/24 and 192.168.20.0/24 as directly connected.
+- **Addresses look right but ping still fails.** Confirm each host actually installed its default gateway —
+  `ip route` on the PC must show a `default via` entry. The lab hands the PCs an address but no default route,
+  so a host that was never given one can answer on its own subnet and nothing beyond it.
+- **`show vlan brief` shows a port in the wrong VLAN.** Creating the VLAN and assigning a port to it are separate
+  steps — a port assigned to a VLAN that does not exist yet will not forward.
+
+### Completion Checklist
+Work through these before you call the lab done.
+- [ ] Configure access and trunk ports on Layer 2 switches.
+- [ ] Create and assign VLANs for different user segments.
+- [ ] Configure routed interfaces on a router for VLAN gateways.
+- [ ] Verify and troubleshoot trunk allow-list and VLAN transport issues.
+- [ ] Restore inter-VLAN connectivity between endpoints.
+- [ ] VLAN database is consistent across relevant switches.
+- [ ] Trunks permit the required VLANs.
+- [ ] Hosts in the same VLAN can communicate across the switched path.
+
+## Verifying your work
+
+Each of these is something you can prove from the device before calling the lab done.
+
+- [ ] VLAN 10 and VLAN 20 present and active on both SW1 and SW2.
+- [ ] PC1 interface on SW1 assigned to VLAN 10; PC2 interface on SW2 assigned to VLAN 20.
+- [ ] Uplink ports between SW1/SW2 and R1 are trunks and carry both VLANs.
+- [ ] R1 has correct routed interfaces as gateways for both VLANs.
+- [ ] PC1 can ping PC2 via inter-VLAN routing.
+- [ ] Trunks allow required VLANs and there are no native VLAN mismatches.
+
+## If it doesn't work
+
+- Trunk allow-list drift resulting in missing VLAN transport.
+- Native VLAN mismatches between switches.
+- Host assigned to wrong access VLAN.
+- Troubleshooting end-to-end connectivity between user segments.
+
+Once it works, these are worth breaking on purpose — each one produces a different symptom:
+
+- Native VLAN mismatch between switch and router trunk.
+- Trunk missing VLAN 10 or 20 in allowed VLAN list.
+- Host assigned to the wrong VLAN during port configuration.
+
+---
+
+Contributed by Goldfish Networks — https://goldfishnetworks.com/archive/ccna-inter-vlan-routing-two-clients-across-a-router

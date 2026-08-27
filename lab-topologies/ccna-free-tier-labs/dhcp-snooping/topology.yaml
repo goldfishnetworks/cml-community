@@ -1,0 +1,235 @@
+lab:
+  version: 0.2.0
+  title: "DHCP Snooping Trust Boundary"
+  description: "Baseline: VLAN 10 access with a router gateway/DHCP server. Learner will enable DHCP Snooping and trust only the uplink."
+  notes: |-
+    ## Learning objectives
+    - Explain the purpose of DHCP Snooping and the trust boundary on an access switch
+    - Enable DHCP Snooping globally and for a specific VLAN
+    - Trust only the uplink interface toward the legitimate DHCP server
+    - Verify DHCP Snooping operational status and bindings
+    
+    ## Lab guide
+    ## Scenario
+    A small campus site is tightening security at the access edge. Users have reported intermittent loss of IP addresses after a contractor plugged in a personal Wi‑Fi router that began offering rogue DHCP leases. Your job is to enforce a clear trust boundary on the access switch so that only the legitimate DHCP server (the default gateway router) can send DHCP Offer/Ack messages. This is the first lab in the Layer 2 Security Hardening series and focuses solely on DHCP Snooping and correct trust placement.
+    
+    ## Prerequisites & Access
+    - Level and time: Beginner · ~30 minutes
+    - You will need: Cisco Modeling Labs, and room for 4 nodes (2 network devices, 2 hosts). That fits the 5-node limit on CML Free.
+    - Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+    
+    ## Access & credentials
+    
+    Open a device's console from the CML topology view (click the node, then **Console**).
+    
+    - **PC1, PC2** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+    
+    These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+    
+    ## Topology Walkthrough
+    - SW1 (Layer‑2 access switch) connects upstream to R1 on Ethernet0/0. That single link is the uplink to the real DHCP server and default gateway.
+    - Two user hosts (PC1 and PC2) connect to SW1 on Ethernet0/1 and Ethernet0/2 respectively.
+    - The entire LAN is in VLAN 10 using the 10.0.0.0/24 subnet.
+    - R1 provides the gateway at 10.0.0.1 and runs an on‑box DHCP server for the 10.0.0.0/24 network.
+    - For this graded lab, R1 and the hosts are already configured. You will configure only SW1’s Layer‑2 security (DHCP Snooping) — no routing.
+    
+    ## IP Addressing Plan
+    - VLAN 10 Users: 10.0.0.0/24
+      - Default Gateway (R1): 10.0.0.1/24
+      - PC1: 10.0.0.10/24 (default route via 10.0.0.1)
+      - PC2: 10.0.0.20/24 (default route via 10.0.0.1)
+    
+    ## Tasks
+    1. Identify the trust boundary
+       - What: Determine which single interface on SW1 should be trusted for DHCP Snooping.
+       - Why: Only the path facing the legitimate DHCP server must be trusted so rogue servers on access ports are blocked. In this topology, the uplink toward R1 is the only trusted interface; host‑facing ports remain untrusted by default.
+    
+    2. Enable DHCP Snooping globally
+       - What: Activate DHCP Snooping at the switch level.
+       - Why: Global enablement is required before VLAN‑scoped enforcement can work.
+    
+    3. Enable DHCP Snooping for VLAN 10
+       - What: Arm DHCP Snooping for the user VLAN.
+       - Why: DHCP Snooping is per‑VLAN; without binding the correct VLAN, no protection or bindings are created for that segment.
+    
+    4. Trust only the uplink interface toward R1
+       - What: On SW1’s Ethernet0/0 (uplink to R1), configure the port as trusted for DHCP Snooping.
+       - Why: DHCP Offer/Ack must be allowed only from the real server. Access ports toward hosts should remain untrusted (default) so a rogue DHCP server on a user port is blocked.
+    
+    5. Preserve existing Layer‑2 forwarding
+       - What: Do not add routing, helper addresses, or unrelated features. Keep VLAN 10 and access modes as provided.
+       - Why: This lab evaluates only deterministic DHCP Snooping configuration, not routing or other security features.
+    
+    ## Verification
+    Run these checks after you finish the configuration:
+    - From SW1:
+      - show ip dhcp snooping — confirm global enable and that VLAN 10 is listed under the enabled VLANs. Confirm the uplink interface is trusted and access ports are untrusted.
+      - show ip dhcp snooping binding — confirm the binding table output is available. It may be empty until a client renews/obtains a lease; the key is that the feature is enabled and ready.
+    - From PC1 and PC2:
+      - ping 10.0.0.1 — both hosts should reach the default gateway.
+      - ping between hosts (PC1 to PC2 and vice versa) — end‑to‑end L2 forwarding remains intact.
+    
+    ## Troubleshooting
+    - If show ip dhcp snooping does not list VLAN 10, you likely enabled only the global command and missed the per‑VLAN command.
+    - If legitimate DHCP responses appear blocked (in a dynamic environment), verify the trust is on the uplink interface facing the server, not on a host‑facing port.
+    - If output is unclear, confirm interface roles: Ethernet0/0 is the uplink to R1; Ethernet0/1 and Ethernet0/2 face hosts and must remain untrusted by default.
+    - Ensure you did not add unrelated features (routing, helper‑address) that could mask the root cause. This lab checks the deterministic config, not runtime client state.
+    
+    ## Completion Checklist
+    Work through these before you call the lab done.
+    - [ ] Explain the purpose of DHCP Snooping and the trust boundary on an access switch
+    - [ ] Enable DHCP Snooping globally and for a specific VLAN
+    - [ ] Trust only the uplink interface toward the legitimate DHCP server
+    - [ ] Verify DHCP Snooping operational status and bindings
+    
+    ## Verification checklist
+    - DHCP Snooping is enabled globally on SW1
+    - DHCP Snooping is enabled for VLAN 10 on SW1
+    - SW1 Ethernet0/0 (uplink toward R1) is trusted for DHCP Snooping
+    - Host-facing ports remain untrusted (default)
+    - PC1 and PC2 can ping the default gateway 10.0.0.1
+    - show ip dhcp snooping binding is available (may be empty until leases occur)
+    
+    ## Troubleshooting focus
+    - DHCP Snooping enabled globally but not for the correct VLAN
+    - Trust configured on the wrong interface (host-facing port) causing a security gap
+    - Uplink not trusted, dropping legitimate DHCP replies from the server
+    - Using the wrong VLAN number for snooping leading to no bindings
+    
+    ## Troubleshooting scenarios
+    - Trust boundary misplaced: a host-facing port was trusted instead of the uplink
+    - VLAN 10 omitted from DHCP Snooping VLAN list
+    - Assuming DHCP Snooping is per-switch only and forgetting the per-VLAN activation
+nodes:
+  - id: n0
+    label: R1
+    node_definition: iol-xe
+    x: -280
+    y: -40
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        type: physical
+        slot: 3
+    configuration: |
+      hostname R1
+      no ip domain lookup
+      ip dhcp excluded-address 10.0.0.1 10.0.0.9
+      ip dhcp pool VLAN10
+       network 10.0.0.0 255.255.255.0
+       default-router 10.0.0.1
+      interface Ethernet0/0
+       description To-SW1 Uplink
+       ip address 10.0.0.1 255.255.255.0
+       no shutdown
+      line vty 0 4
+       login
+       transport input none
+  - id: n1
+    label: SW1
+    node_definition: ioll2-xe
+    x: 0
+    y: 0
+    interfaces:
+      - id: i1
+        label: Ethernet0/0
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        type: physical
+        slot: 3
+    configuration: |
+      hostname SW1
+      no ip domain lookup
+      vtp mode transparent
+      ! L2 VLAN present; ports already in access mode for VLAN 10
+      vlan 10
+       name USERS
+      interface Ethernet0/0
+       description UPLINK-to-R1 (gateway/DHCP server)
+       switchport mode access
+       switchport access vlan 10
+       no shutdown
+      interface Ethernet0/1
+       description PC1-Access
+       switchport mode access
+       switchport access vlan 10
+       no shutdown
+      interface Ethernet0/2
+       description PC2-Access
+       switchport mode access
+       switchport access vlan 10
+       no shutdown
+      interface Ethernet0/3
+       shutdown
+      ip default-gateway 10.0.0.1
+  - id: n2
+    label: PC1
+    node_definition: alpine
+    x: 220
+    y: 120
+    interfaces:
+      - id: i0
+        label: eth0
+        type: physical
+        slot: 0
+    configuration: |
+      #!/bin/sh
+      ip link set eth0 up
+      ip addr add 10.0.0.10/24 dev eth0
+      ip route add default via 10.0.0.1
+  - id: n3
+    label: PC2
+    node_definition: alpine
+    x: 220
+    y: -120
+    interfaces:
+      - id: i0
+        label: eth0
+        type: physical
+        slot: 0
+    configuration: |
+      #!/bin/sh
+      ip link set eth0 up
+      ip addr add 10.0.0.20/24 dev eth0
+      ip route add default via 10.0.0.1
+links:
+  - id: l0
+    n1: n1
+    i1: i1
+    n2: n0
+    i2: i1
+  - id: l1
+    n1: n1
+    i1: i2
+    n2: n2
+    i2: i0
+  - id: l2
+    n1: n1
+    i1: i3
+    n2: n3
+    i2: i0

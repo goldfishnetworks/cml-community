@@ -1,0 +1,256 @@
+lab:
+  version: 0.2.0
+  title: "Static EtherChannel: Bundling Two Links (mode on)"
+  description: "Beginner CCNA lab: build a static Layer-2 EtherChannel (mode on) between SW1 and SW2 using two parallel links as members of Port-channel1. Port-channel1 is an access port in VLAN 10; PC-A and PC-B are in VLAN 10 and should ping across the bundle. Baseline ships without the EtherChannel configured."
+  notes: |-
+    ## Learning objectives
+    - Create a static (mode on) Layer-2 EtherChannel with two member links on both switches
+    - Configure the logical Port-channel interface as an access port in VLAN 10
+    - Verify bundling state with show etherchannel summary and related commands
+    - Validate end-to-end host connectivity across the single logical link
+    - Recognize how EtherChannel prevents STP from blocking one of the parallel links
+    
+    ## Lab guide
+    ## Scenario
+    Your campus team added a second inter-switch link between two wiring-closet switches to increase capacity and resiliency. With two independent parallel links, spanning tree would block one to prevent loops, wasting bandwidth. Your task is to bundle both physical links into a single logical interface using a static (unconditional) EtherChannel so both links forward traffic as one port-channel. Because this is a basic user VLAN deployment, the logical port-channel should behave like an access port in VLAN 10.
+    
+    ## Prerequisites & Access
+    - Level and time: Beginner · ~35 minutes
+    - You will need: Cisco Modeling Labs, and room for 4 nodes (2 network devices, 2 hosts). That fits the 5-node limit on CML Free.
+    - Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+    
+    ## Access & credentials
+    
+    Open a device's console from the CML topology view (click the node, then **Console**).
+    
+    - **PC-A, PC-B** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+    
+    These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+    
+    ## Topology Walkthrough
+    - SW1 and SW2 are Layer-2 switches connected by two parallel cables: Ethernet0/0-to-Ethernet0/0 and Ethernet0/1-to-Ethernet0/1. These will be the EtherChannel members.
+    - PC-A is cabled to SW1 on Ethernet0/2; PC-B is cabled to SW2 on Ethernet0/2. Both hosts live in VLAN 10 and are pre-addressed in the same /24.
+    - There is no Layer-3 gateway in this lab. Your goal is to provide transparent Layer-2 connectivity across the single logical bundle (Port-channel1) so the hosts can ping one another.
+    
+    ## IP Addressing Plan
+    - VLAN 10 Users: 10.10.10.0/24 (no gateway in this L2-only lab)
+      - PC-A: 10.10.10.11/24
+      - PC-B: 10.10.10.12/24
+    
+    ## Tasks
+    1. Confirm the host-facing access ports on both switches are in VLAN 10.
+       - Why: Ensures each PC attaches to the intended user VLAN so Layer-2 forwarding is consistent end-to-end.
+       - What to watch for: Port Ethernet0/2 on both SW1 and SW2 should be an access port in VLAN 10.
+    
+    2. Prepare the two inter-switch member links (Ethernet0/0 and Ethernet0/1) on both switches for aggregation.
+       - Why: Both ends must use identical EtherChannel settings; static mode requires no negotiation protocol.
+       - What to watch for: Avoid configuring access/trunk parameters on the physical members directly; the Port-channel’s settings will be inherited by the members.
+    
+    3. Create the static EtherChannel on both switches using the same channel group number and mode.
+       - Why: Deterministic bundling with mode on forms the logical Port-channel without LACP or PAgP.
+       - What to watch for: Use the same group number on both links and on both switches; apply the channel-group under each member interface.
+    
+    4. Configure the logical Port-channel interface (Port-channel1) as an access port in VLAN 10 on both switches.
+       - Why: Hosts are in VLAN 10; the inter-switch logical link must also carry VLAN 10 for end-to-end connectivity.
+       - What to watch for: The Port-channel should show as a Layer-2 access interface in VLAN 10; the protocol field for the EtherChannel should be '-' (none), indicating static mode.
+    
+    5. Verify EtherChannel formation and health.
+       - Why: Ensures both physical members are bundled and forwarding as a single interface.
+       - What to watch for: 'show etherchannel summary' should list Po1 with both members in 'P' (bundled) state and protocol '-'.
+    
+    ## Verification
+    Run these checks after configuration:
+    - From PC-A, ping 10.10.10.12 and expect success with low loss and latency.
+    - On each switch:
+      - 'show etherchannel summary' should show Port-channel1 with both member interfaces in the 'P' (bundled) state and protocol '-'.
+      - 'show etherchannel 1 port-channel' should confirm the logical interface is up and Layer-2.
+      - 'show interfaces port-channel 1' should show it is an access port in VLAN 10 with input/output counters incrementing.
+    
+    ## Troubleshooting
+    - If ping fails intermittently or consistently:
+      - Check EtherChannel consistency: same channel-group number and 'mode on' on both members and on both switches.
+      - Confirm Port-channel1 is an access port in VLAN 10 on both switches; mismatched VLANs or a trunk/access mismatch prevents proper forwarding.
+      - Ensure both member interfaces are up and not error-disabled; a down member reduces capacity but should not break the bundle entirely.
+      - Validate that the members inherit the Port-channel’s Layer-2 settings (do not override with conflicting commands under the physical interfaces).
+    - Use these diagnostics:
+      - 'show etherchannel summary' and 'show etherchannel 1 detail' to check state and reasons for non-bundling.
+      - 'show run interface Ethernet0/0', 'Ethernet0/1', and 'Port-channel1' to compare configurations side-by-side.
+      - From PC-A, 'ping -c 5 10.10.10.12' to confirm end-to-end success after fixes.
+    
+    ## Completion Checklist
+    Work through these before you call the lab done.
+    - [ ] Create a static (mode on) Layer-2 EtherChannel with two member links on both switches
+    - [ ] Configure the logical Port-channel interface as an access port in VLAN 10
+    - [ ] Verify bundling state with show etherchannel summary and related commands
+    - [ ] Validate end-to-end host connectivity across the single logical link
+    - [ ] Recognize how EtherChannel prevents STP from blocking one of the parallel links
+    - [ ] All intended member links join the correct port-channel.
+    - [ ] Port-channel status and trunking state are healthy.
+    - [ ] Traffic continues when a single member link fails.
+    
+    ## Verification checklist
+    - Port-channel1 exists on both switches and is up/up as a Layer-2 interface
+    - Both SW1 and SW2 show two member links bundled (flag P) in Po1
+    - EtherChannel protocol shows '-' (none), indicating static mode
+    - Port-channel1 is an access port in VLAN 10 on both switches
+    - PC-A (10.10.10.11) successfully pings PC-B (10.10.10.12)
+    
+    ## Troubleshooting focus
+    - Member mode mismatch or missing channel-group prevents bundling
+    - Access/trunk or VLAN inconsistency between Port-channel and member interfaces breaks the bundle
+    - Only one member added (others suspended) due to differing parameters
+    - Interfaces administratively down or error-disabled will not participate
+    - Port-channel not assigned to the correct VLAN (hosts cannot communicate)
+    
+    ## Troubleshooting scenarios
+    - EtherChannel mode or group mismatch prevents bundling; verify identical channel-group and mode on both ends
+    - Member interfaces carry conflicting Layer-2 parameters compared to the Port-channel; align them so the bundle forms
+    - A member interface is down or error-disabled; restore physical/link state so it can join the bundle
+nodes:
+  - id: n0
+    label: SW1
+    node_definition: ioll2-xe
+    x: -220
+    y: 0
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        type: physical
+        slot: 3
+    configuration: |
+      hostname SW1
+      no ip domain lookup
+      vtp mode transparent
+      ! VLAN for users
+      vlan 10
+       name USERS10
+      ! Host-facing access port
+      interface Ethernet0/2
+       description PC-A
+       switchport mode access
+       switchport access vlan 10
+       no shutdown
+      ! Candidate EtherChannel members (no bundling yet in baseline)
+      interface Ethernet0/0
+       description SW1<->SW2 link-1
+       no shutdown
+      interface Ethernet0/1
+       description SW1<->SW2 link-2
+       no shutdown
+  - id: n1
+    label: SW2
+    node_definition: ioll2-xe
+    x: 220
+    y: 0
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        label: Ethernet0/0
+        type: physical
+        slot: 0
+      - id: i2
+        label: Ethernet0/1
+        type: physical
+        slot: 1
+      - id: i3
+        label: Ethernet0/2
+        type: physical
+        slot: 2
+      - id: i4
+        label: Ethernet0/3
+        type: physical
+        slot: 3
+    configuration: |
+      hostname SW2
+      no ip domain lookup
+      vtp mode transparent
+      ! VLAN for users
+      vlan 10
+       name USERS10
+      ! Host-facing access port
+      interface Ethernet0/2
+       description PC-B
+       switchport mode access
+       switchport access vlan 10
+       no shutdown
+      ! Candidate EtherChannel members (no bundling yet in baseline)
+      interface Ethernet0/0
+       description SW2<->SW1 link-1
+       no shutdown
+      interface Ethernet0/1
+       description SW2<->SW1 link-2
+       no shutdown
+  - id: n2
+    label: PC-A
+    node_definition: alpine
+    x: -220
+    y: 180
+    interfaces:
+      - id: i0
+        label: eth0
+        type: physical
+        slot: 0
+      - id: i1
+        label: eth1
+        type: physical
+        slot: 1
+    configuration: |
+      # bring up and address the interface
+      ip link set eth0 up
+      ip addr add 10.10.10.11/24 dev eth0
+  - id: n3
+    label: PC-B
+    node_definition: alpine
+    x: 220
+    y: 180
+    interfaces:
+      - id: i0
+        label: eth0
+        type: physical
+        slot: 0
+      - id: i1
+        label: eth1
+        type: physical
+        slot: 1
+    configuration: |
+      # bring up and address the interface
+      ip link set eth0 up
+      ip addr add 10.10.10.12/24 dev eth0
+links:
+  - id: l0
+    n1: n0
+    i1: i1
+    n2: n1
+    i2: i1
+  - id: l1
+    n1: n0
+    i1: i2
+    n2: n1
+    i2: i2
+  - id: l2
+    n1: n0
+    i1: i3
+    n2: n2
+    i2: i0
+  - id: l3
+    n1: n1
+    i1: i3
+    n2: n3
+    i2: i0
