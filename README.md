@@ -69,3 +69,4 @@ This project was written and is maintained by the following individuals:
 * Xinyu Wei <trustywolf@sfc.wide.ad.jp>
 * Kelly Christians <kelly.christians@rsmus.com>
 * Ariadne Haske <ariadne@haske.org>
+* Alec Gauldin <goldfishnetworks@gmail.com>

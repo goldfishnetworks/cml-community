@@ -1,0 +1,141 @@
+# EIGRP Fundamentals: First Adjacency & Route Exchange
+
+Interfaces addressed and hosts configured; EIGRP not yet enabled. Goal: bring up EIGRP AS 100 between R1 and R2 and advertise R1's LAN.
+
+**5 nodes** (alpine, iol-xe, ioll2-xe) — runs on CML-Free  ·  about 35 minutes  ·  beginner
+
+## What you'll configure
+
+- Enable EIGRP with a consistent AS number and default K-values across routers
+- Use network statements with correct wildcards to activate EIGRP on the intended interfaces
+- Disable auto-summary for classless behavior
+- Verify EIGRP adjacency formation and route exchange with core IOS show commands
+- Validate end-to-end reachability from a host across the routed transit
+
+## Importing
+
+In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
+addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
+below are attached to the lab's Notes in CML, so they travel with the topology.
+
+## Tasks
+
+### Scenario
+You are the network associate at a small branch site. Two routers connect sites over a point-to-point transit. A user LAN at Site A must be reachable from Site B via an interior gateway protocol. The operations team selected EIGRP for its simplicity and fast convergence. Your task today is to bring up the very first EIGRP adjacency between the routers and advertise Site A’s LAN so Site B learns it dynamically. This is foundational work for a larger EIGRP series.
+
+### Prerequisites & Access
+- Level and time: Beginner · ~35 minutes
+- You will need: Cisco Modeling Labs, and room for 5 nodes (3 network devices, 2 hosts). That fits the 5-node limit on CML Free.
+- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+
+### Access & credentials
+
+Open a device's console from the CML topology view (click the node, then **Console**).
+
+- **CLIENT-A, CLIENT-B** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+
+These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+
+### Topology Walkthrough
+- RTR-SITEA-R1 and RTR-SITEB-R2 are Cisco IOS routers joined by a point-to-point /30 transit on Ethernet0/0 (10.0.12.0/30). R1 uses .1 and R2 uses .2.
+- R1 also connects to a shared access segment (LAN-A) on Ethernet0/1 at 192.168.1.0/24 (gateway 192.168.1.1). That LAN has two Linux clients connected through a simple Layer-2 access switch (SW-SITEA-ACC1):
+  - CLIENT-A 192.168.1.10/24, default gateway 192.168.1.1
+  - CLIENT-B 192.168.1.20/24, default gateway 192.168.1.1
+- No additional networks exist on R2 for this lab. Your goal is to advertise only R1’s LAN toward R2.
+
+### IP Addressing Plan
+- Transit 10.0.12.0/30 (point-to-point):
+  - RTR-SITEA-R1 Ethernet0/0: 10.0.12.1/30
+  - RTR-SITEB-R2 Ethernet0/0: 10.0.12.2/30
+- LAN-A 192.168.1.0/24 (shared segment via SW-SITEA-ACC1):
+  - RTR-SITEA-R1 Ethernet0/1 (gateway): 192.168.1.1/24
+  - CLIENT-A: 192.168.1.10/24, default gateway 192.168.1.1
+  - CLIENT-B: 192.168.1.20/24, default gateway 192.168.1.1
+
+### Tasks
+1. Prepare to run EIGRP deterministically
+- What: Use a single EIGRP autonomous system number (AS 100) on both routers; keep default K-values.
+- Why: EIGRP neighbors only form when they share AS and K-values.
+
+2. Activate EIGRP only where intended
+- What: Enable EIGRP on both routers and use precise network statements with wildcards to include the exact interfaces required:
+  - On both routers, activate EIGRP on the 10.0.12.0/30 transit.
+  - On R1, also activate EIGRP on the 192.168.1.0/24 LAN interface so the LAN is advertised to R2.
+- Why: EIGRP only runs on interfaces matched by network statements, and reachability depends on including the correct subnets.
+
+3. Ensure classless operation
+- What: Disable automatic summarization for EIGRP on both routers.
+- Why: Prevent classful boundaries from collapsing your subnets; modern deployments are classless.
+
+4. Form the first adjacency
+- What: Confirm that R1 and R2 become EIGRP neighbors across the 10.0.12.0/30 transit.
+- Why: Adjacency is required before any EIGRP routes are exchanged.
+
+5. Validate route exchange
+- What: Verify that R2 learns 192.168.1.0/24 as an EIGRP route and installs it in the routing table.
+- Why: The goal is for Site B to dynamically learn Site A’s user LAN.
+
+6. End-user reachability
+- What: From CLIENT-A (192.168.1.10), test reachability to R2’s transit IP (10.0.12.2).
+- Why: This confirms end-to-end forwarding across the EIGRP-enabled transit and a correct return path on R2.
+
+### Verification
+- On both routers:
+  - show ip eigrp neighbors (expect one neighbor on Ethernet0/0 with the peer’s 10.0.12.x address)
+  - show ip protocols (confirm EIGRP AS 100, correct networks, and auto-summary disabled)
+- On R2:
+  - show ip route eigrp (expect D 192.168.1.0/24 via 10.0.12.1)
+- On CLIENT-A:
+  - ip addr (confirm 192.168.1.10/24 configured)
+  - ping 192.168.1.1 (default gateway check)
+  - ping 10.0.12.2 (end-to-end check to R2’s transit IP)
+
+### Troubleshooting
+- Adjacency does not form:
+  - Check EIGRP AS consistency on both routers and that the correct interfaces are matched by network + wildcard.
+  - Verify interface status and addressing on the transit (up/up, correct /30 on both ends).
+- Route not present on R2:
+  - Confirm R1 advertises 192.168.1.0/24 under EIGRP and that adjacency is up.
+  - Ensure no auto-summary is masking your subnets; verify with show ip protocols.
+- Host can’t reach R2:
+  - Validate host IP/gateway, then traceroute from CLIENT-A to 10.0.12.2 to see where the path stops.
+  - On routers, confirm the EIGRP topology and route table entries exist for 192.168.1.0/24.
+
+### Completion Checklist
+Work through these before you call the lab done.
+- [ ] Enable EIGRP with a consistent AS number and default K-values across routers
+- [ ] Use network statements with correct wildcards to activate EIGRP on the intended interfaces
+- [ ] Disable auto-summary for classless behavior
+- [ ] Verify EIGRP adjacency formation and route exchange with core IOS show commands
+- [ ] Validate end-to-end reachability from a host across the routed transit
+- [ ] Neighbors form on intended links.
+- [ ] Expected networks appear in the topology and routing tables.
+- [ ] Metrics and path choices align with interface bandwidth/delay.
+
+## Verifying your work
+
+Each of these is something you can prove from the device before calling the lab done.
+
+- [ ] R1 and R2 appear in each other's show ip eigrp neighbors output on Ethernet0/0
+- [ ] R2 has D 192.168.1.0/24 learned via 10.0.12.1 in show ip route eigrp
+- [ ] show ip protocols on both routers lists EIGRP AS 100 and the expected networks
+- [ ] CLIENT-A can ping 192.168.1.1 and 10.0.12.2 successfully
+
+## If it doesn't work
+
+- If neighbors do not form, confirm both sides use the same EIGRP AS and that the shared transit is matched by a network statement on both routers.
+- Confirm IP addressing, masks, and interface status on the transit: both ends must be in 10.0.12.0/30 and up/up.
+- Check show ip protocols to ensure auto-summary is disabled and the correct networks are included.
+- On R2, if 192.168.1.0/24 is missing from the routing table, confirm R1 advertises that LAN and that adjacency is up.
+- From the host, if you can ping the default gateway but not R2, suspect missing EIGRP advertisement or neighbor down.
+
+Once it works, these are worth breaking on purpose — each one produces a different symptom:
+
+- AS mismatch or incorrect wildcard in a network statement prevents adjacency on the transit
+- Passive or down interface/addressing issue blocks neighbor formation
+- Missing route on R2 due to failure to enable EIGRP on R1’s LAN interface
+
+---
+
+Contributed by Goldfish Networks — https://goldfishnetworks.com/archive/eigrp-fundamentals-first-adjacency-route-exchange

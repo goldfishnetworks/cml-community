@@ -1,0 +1,139 @@
+# eBGP Fundamentals: The First Peering
+
+Build an eBGP session over a /30 between two ASes and advertise one /24 from each side using Loopback0. Interfaces and IPs are pre-configured; BGP is not yet applied.
+
+**5 nodes** (alpine, iol-xe) — runs on CML-Free  ·  about 35 minutes  ·  beginner
+
+## What you'll configure
+
+- Configure an eBGP neighbor over a directly connected /30 using neighbor remote-as with different ASNs.
+- Set a stable BGP router-id and originate a /24 from Loopback0 using the exact-match network mask.
+- Verify session formation and route installation with show ip bgp summary, show ip bgp, and show ip route bgp.
+- Confirm end-to-end reachability to the remote advertised Loopback using ping sourced from the local Loopback.
+- Recognize common eBGP bring-up pitfalls: wrong remote-as, missing exact-match network, or addressing mismatch.
+
+## Importing
+
+In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
+addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
+below are attached to the lab's Notes in CML, so they travel with the topology.
+
+## Tasks
+
+### Scenario
+You are the network engineer for a small enterprise standardizing WAN edge routing. After a maintenance window, a new point-to-point transit was delivered between two sites, and leadership wants external BGP (eBGP) to be the sole routing exchange across it. Your task is to build a clean eBGP peering from scratch and advertise one internal /24 from each site using Loopback0. This first lab in the BGP Fundamentals series ensures you can form the neighbor relationship deterministically and verify that the exchanged routes are present and usable.
+
+### Prerequisites & Access
+- Level and time: Beginner · ~35 minutes
+- You will need: Cisco Modeling Labs, and room for 5 nodes (2 network devices, 3 hosts). That fits the 5-node limit on CML Free.
+- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+
+### Access & credentials
+
+Open a device's console from the CML topology view (click the node, then **Console**).
+
+- **CLIENT-A, CLIENT-B, SRV-NMS** (Alpine hosts) — username `cisco` / password `cisco`. These are the CML image defaults; the lab sets no password of its own.
+
+These are the credentials the starter topology ships with. If a prompt rejects them, the device has not finished booting — wait for the console to settle and try again.
+
+### Topology Walkthrough
+- RTR-BR1-EDGE (AS 65001) and RTR-BR2-EDGE (AS 65002) are directly connected over a /30 point-to-point link. This is where the eBGP session will form using the neighbor’s directly connected interface address.
+- Each router has a Loopback0 with a /24 mask; that /24 will be the advertised LAN prefix via BGP’s network statement. The loopback’s host address (.1) will be used as the ping target from the remote side after BGP converges.
+- Three Alpine hosts provide basic operational context: CLIENT-A and SRV-NMS sit behind RTR-BR1-EDGE on separate /24s, and CLIENT-B sits behind RTR-BR2-EDGE. These hosts validate local LAN health and provide a place to test Linux tooling, though cross-site reachability in this lab is validated primarily to the loopbacks from the routers.
+
+### IP Addressing Plan
+- Transit: 10.12.12.0/30 — RTR-BR1-EDGE Ethernet0/0 = 10.12.12.1, RTR-BR2-EDGE Ethernet0/0 = 10.12.12.2
+- Advertised prefixes via BGP:
+  - RTR-BR1-EDGE Loopback0 = 10.1.1.1/24 (advertise 10.1.1.0/24)
+  - RTR-BR2-EDGE Loopback0 = 10.2.2.1/24 (advertise 10.2.2.0/24)
+- Local user LANs (for host checks):
+  - RTR-BR1-EDGE Ethernet0/1 = 10.1.10.1/24 (CLIENT-A = 10.1.10.10/24)
+  - RTR-BR1-EDGE Ethernet0/2 = 10.1.20.1/24 (SRV-NMS = 10.1.20.10/24)
+  - RTR-BR2-EDGE Ethernet0/1 = 10.2.20.1/24 (CLIENT-B = 10.2.20.10/24)
+
+### Tasks
+1. Prepare for deterministic BGP deployment
+   - What: Identify each router’s AS, the neighbor’s transit IP, and the loopback /24 you plan to advertise.
+   - Why: BGP sessions establish only with matching neighbor remote-as on both ends and working IP reachability between the neighbor addresses.
+
+2. Configure BGP on RTR-BR1-EDGE
+   - What: Create the BGP process with the correct local AS, set a stable router-id, add a neighbor that points to the remote transit IP with the peer’s AS, and originate the local loopback /24 using the exact mask.
+   - Why: eBGP uses directly connected neighbor addresses by default. The network statement requires an exact route in the routing table with a matching mask to advertise.
+
+3. Configure BGP on RTR-BR2-EDGE
+   - What: Mirror the configuration with the correct (different) local AS, set the router-id, add the neighbor using the peer’s transit IP and AS, and originate the local loopback /24 with an exact-match mask.
+   - Why: Both sides must agree on neighbor remote-as to move beyond Idle/Active to Established.
+
+4. Validate neighbor formation and routing tables
+   - What: Use device commands to confirm the BGP finite-state machine reached Established and that exactly one prefix is received from the neighbor on each side. Confirm the learned route exists in the routing table and that the best path selection aligns with expectations for a single neighbor.
+   - Why: Verifying the control plane (BGP session) and data plane (route installation) ensures end-to-end feasibility.
+
+5. Confirm end-to-end reachability to the remote loopback
+   - What: From each router, ping the peer’s advertised loopback using the local loopback as the source.
+   - Why: Sourcing from the loopback tests whether the advertised /24 is truly reachable via the eBGP-learned path and that return routing exists.
+
+6. Document outcomes
+   - What: Record final neighbor state, prefixes received, and successful ping tests. Note any deviations you corrected.
+   - Why: Establishes a baseline for future labs (iBGP, filtering, attributes) and operational handover.
+
+### Verification
+From the hosts (Linux):
+- On CLIENT-A and SRV-NMS, verify LAN health to the local gateway:
+  - ip addr (interface has the correct /24)
+  - ping 10.1.10.1 (from CLIENT-A) and ping 10.1.20.1 (from SRV-NMS) should succeed
+- On CLIENT-B, verify LAN health:
+  - ip addr
+  - ping 10.2.20.1 should succeed
+
+From the routers (IOS):
+- show ip bgp summary: Neighbor should be Established and State/PfxRcd should show 1 on both routers.
+- show ip bgp: The remote 10.1.1.0/24 or 10.2.2.0/24 should appear with the correct next hop.
+- show ip route bgp: Each router should have exactly one BGP-learned /24 from the peer.
+- ping <remote-loopback> source <local-loopback> should succeed in both directions.
+
+### Troubleshooting
+- Session stuck in Idle/Active: Confirm IP reachability to the neighbor over the /30 and that neighbor remote-as matches the peer’s AS (not your own). Ensure the transit addresses and masks are correct and on the intended interfaces.
+- No learned prefixes: Verify the network statement uses the mask keyword and that the exact route exists in the RIB (Loopback0 /24 must be present). If the mask is omitted or mismatched, BGP will not advertise it.
+- Intermittent success: Validate there are no typos in neighbor IPs and that the physical interfaces are up/up with matching /30 addressing. Use show ip bgp neighbors for deeper insight (keepalive/hold timers, received prefixes, capabilities).
+- Data-plane failure despite Established: Confirm the advertised /24 shows up in show ip route bgp and that the next hop is reachable. Use ping/traceroute to isolate forwarding vs. control-plane issues.
+
+### Completion Checklist
+Work through these before you call the lab done.
+- [ ] Configure an eBGP neighbor over a directly connected /30 using neighbor remote-as with different ASNs.
+- [ ] Set a stable BGP router-id and originate a /24 from Loopback0 using the exact-match network mask.
+- [ ] Verify session formation and route installation with show ip bgp summary, show ip bgp, and show ip route bgp.
+- [ ] Confirm end-to-end reachability to the remote advertised Loopback using ping sourced from the local Loopback.
+- [ ] Recognize common eBGP bring-up pitfalls: wrong remote-as, missing exact-match network, or addressing mismatch.
+- [ ] BGP neighbors reach ESTABLISHED state.
+- [ ] Expected prefixes are learned and advertised.
+- [ ] Best-path decisions match the intended policy.
+
+## Verifying your work
+
+Each of these is something you can prove from the device before calling the lab done.
+
+- [ ] BGP neighbors between RTR-BR1-EDGE and RTR-BR2-EDGE reach Established.
+- [ ] Each router receives exactly one prefix from the peer (the remote /24).
+- [ ] The learned /24 is installed in the routing table as a BGP route.
+- [ ] Ping from each router’s Loopback0 to the remote Loopback0 (sourced from local Loopback0) succeeds.
+- [ ] Local hosts can ping their default gateways and show correct addressing.
+
+## If it doesn't work
+
+- If the neighbor stays in Idle or Active, confirm the directly connected transit IPs and that the neighbor remote-as values are swapped correctly.
+- If prefixes do not appear in BGP, ensure the network statement includes the mask keyword and that an exact route exists in the RIB.
+- Check for typos in IP addresses on the transit interface; both ends must be in the same /30.
+- Use show ip bgp neighbors to confirm BGP capabilities and that no inbound/outbound filters are suppressing routes.
+- Ping the neighbor’s transit IP before expecting BGP to establish (eBGP default TTL is 1 over a direct link).
+
+Once it works, these are worth breaking on purpose — each one produces a different symptom:
+
+- Remote-as mismatch: BGP stuck in Idle/Active; verify neighbor statements and directly connected addressing.
+- Missing exact-match network: Network statement present but no advertisement because the exact route is absent in the RIB or the mask is wrong.
+- Addressing inconsistency: One end of the /30 misconfigured; interface shows up/up but BGP has no neighbor reachability.
+- Filtering side-effect (future labs): If routes appear filtered, inspect prefix-lists/route-maps applied in or out and confirm intended policy.
+
+---
+
+Contributed by Goldfish Networks — https://goldfishnetworks.com/archive/ebgp-fundamentals-the-first-peering
