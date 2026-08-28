@@ -14,7 +14,7 @@ Two-switch redundant L2 loop with two parallel uplinks. Implement Rapid-PVST+ an
 
 ## Importing
 
-In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+In CML choose **Lab > Import** and pick `spanning-tree.yaml`, or use **Add Lab from Repository** if you have this
 repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
 addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
 below are attached to the lab's Notes in CML, so they travel with the topology.
@@ -29,7 +29,7 @@ Your goal is to put both switches into Rapid-PVST+ mode and make SW1 the determi
 ### Prerequisites & Access
 - Level and time: Beginner · ~45 minutes
 - You will need: Cisco Modeling Labs, and room for 4 nodes (2 network devices, 2 hosts). That fits the 5-node limit on CML Free.
-- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+- Import `spanning-tree.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
 
 ### Access & credentials
 

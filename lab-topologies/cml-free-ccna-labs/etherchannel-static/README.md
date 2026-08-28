@@ -14,7 +14,7 @@ Build a static Layer-2 EtherChannel (mode on) between SW1 and SW2 using two para
 
 ## Importing
 
-In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+In CML choose **Lab > Import** and pick `etherchannel-static.yaml`, or use **Add Lab from Repository** if you have this
 repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
 addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
 below are attached to the lab's Notes in CML, so they travel with the topology.
@@ -27,7 +27,7 @@ Your campus team added a second inter-switch link between two wiring-closet swit
 ### Prerequisites & Access
 - Level and time: Beginner · ~35 minutes
 - You will need: Cisco Modeling Labs, and room for 4 nodes (2 network devices, 2 hosts). That fits the 5-node limit on CML Free.
-- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+- Import `etherchannel-static.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
 
 ### Access & credentials
 

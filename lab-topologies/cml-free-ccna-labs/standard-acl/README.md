@@ -16,7 +16,7 @@ Addressing and management are configured. You will add static routes, PAT on RTR
 
 ## Importing
 
-In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+In CML choose **Lab > Import** and pick `standard-acl.yaml`, or use **Add Lab from Repository** if you have this
 repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
 addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
 below are attached to the lab's Notes in CML, so they travel with the topology.
@@ -31,7 +31,7 @@ You will bring up addressing on all links, add static routes for end-to-end reac
 ### Prerequisites & Access
 - Level and time: Beginner · ~55 minutes
 - You will need: Cisco Modeling Labs, and room for 5 nodes (2 network devices, 3 hosts). That fits the 5-node limit on CML Free.
-- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+- Import `standard-acl.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
 
 ### Access & credentials
 

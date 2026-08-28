@@ -22,7 +22,7 @@ lab:
     ## Prerequisites & Access
     - Level and time: Beginner · ~45 minutes
     - You will need: Cisco Modeling Labs, and room for 5 nodes (1 network device, 4 hosts). That fits the 5-node limit on CML Free.
-    - Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+    - Import `vlans-access-ports.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
     
     ## Access & credentials
     

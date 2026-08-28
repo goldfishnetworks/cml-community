@@ -14,7 +14,7 @@ Baseline addressing and L2 setup for a single VLAN LAN. Configure HSRP group 1 w
 
 ## Importing
 
-In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+In CML choose **Lab > Import** and pick `hsrp-gateway.yaml`, or use **Add Lab from Repository** if you have this
 repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
 addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
 below are attached to the lab's Notes in CML, so they travel with the topology.
@@ -29,7 +29,7 @@ In this first lab of the series, you will configure a basic HSRP pair on a singl
 ### Prerequisites & Access
 - Level and time: Beginner · ~35 minutes
 - You will need: Cisco Modeling Labs, and room for 4 nodes (3 network devices, 1 host). That fits the 5-node limit on CML Free.
-- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+- Import `hsrp-gateway.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
 
 ### Access & credentials
 

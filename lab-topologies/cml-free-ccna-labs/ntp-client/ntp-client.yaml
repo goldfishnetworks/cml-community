@@ -46,7 +46,7 @@ lab:
     - You will need: Cisco Modeling Labs, and room for 2 nodes (2 network
     devices). That fits the 5-node limit on CML Free.
     
-    - Import `topology.yaml`, then configure the devices yourself — the
+    - Import `ntp-client.yaml`, then configure the devices yourself — the
     starter topology is deliberately unconfigured.
     
     

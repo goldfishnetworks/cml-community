@@ -19,7 +19,7 @@ lab:
     ## Prerequisites & Access
     - Level and time: Beginner · ~35 minutes
     - You will need: Cisco Modeling Labs, and room for 4 nodes (3 network devices, 1 host). That fits the 5-node limit on CML Free.
-    - Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+    - Import `hsrp-gateway.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
     
     ## Access & credentials
     

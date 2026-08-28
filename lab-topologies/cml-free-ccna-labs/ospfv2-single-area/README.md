@@ -14,7 +14,7 @@ Addressing and SSH ready. Configure OSPFv2 area 0 across the 3-router chain, adv
 
 ## Importing
 
-In CML choose **Lab > Import** and pick `topology.yaml`, or use **Add Lab from Repository** if you have this
+In CML choose **Lab > Import** and pick `ospfv2-single-area.yaml`, or use **Add Lab from Repository** if you have this
 repository configured as a lab repository. Devices boot with a starting configuration — hostnames and the
 addressing that is already in place — so you begin on the tasks rather than on setup. The same instructions
 below are attached to the lab's Notes in CML, so they travel with the topology.
@@ -29,7 +29,7 @@ During a recent change window, an engineer reported that a new adjacency never r
 ### Prerequisites & Access
 - Level and time: Beginner · ~55 minutes
 - You will need: Cisco Modeling Labs, and room for 5 nodes (3 network devices, 2 hosts). That fits the 5-node limit on CML Free.
-- Import `topology.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
+- Import `ospfv2-single-area.yaml`, then configure the devices yourself — the starter topology is deliberately unconfigured.
 
 ### Access & credentials
 
