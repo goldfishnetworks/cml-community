@@ -56,7 +56,7 @@ follow the sections below, which run roughly in CCNA blueprint order.
 
 ## About
 
-These are the free-tier labs from Goldfish Networks, contributed in full — topology, instructions and
+These are the free labs from Goldfish Networks, contributed in full — topology, instructions and
 verification checklist — so each one stands on its own inside CML. The site carries the same guides and
 additionally grades a configuration you paste into it against the lab's answer key, which is the part that
 does not travel into a repository. https://goldfishnetworks.com
